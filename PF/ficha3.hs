@@ -122,16 +122,28 @@ data Data = D Dia Mes Ano
 deriving Show
 type TabDN = [(Nome,Data)]
 
+procura :: Nome -> TabDN -> Maybe Data
+procura _ [] = Nothing
+procura x ((y,ys):t) | x == y = just ys 
+                     | otherwise = procura x t 
+                    
+idade :: Data -> Nome -> TabDN -> Maybe Int
+idade (D d1 m1 a1) nome ((nom,(D d2 m2 a2):t)) | nome /= nom = idade (D d1 m1 a1) nome t
+                                              | (a1 < a2) || (a1 == a2 && m1 < m2)  || (a1 == a2 && m1 == m2 && d1 < d2) = Nothing 
+                                              | (m1 < m2 ) || (m1 == m2 && d1 > d2) = just (a1-a2-1)
+                                              |otherwise = just (a1-a2)
 anterior :: Data -> Data -> Bool
 anterior (D dia1 mes1 ano1) (D dia2 mes2 ano2) | ano1 < ano2 = True 
                                             | ano1 == ano2 && mes1 < mes2 = True
                                             | ano1 == ano2 && mes1 == mes2 && dia1 < dia2 = True
                                             | otherwise = False
 
- ordena :: TabDN -> TabDN -- ta mal feito n sei tou a saber fazer
+ ordena :: TabDN -> TabDN 
  ordena [] = []
- ordena ((x,xs):(y,ys):t) | anterior xs ys == True = (x,xs):ordena (y,ys) t
-                          | otherwise = (y,ys):ordena (x,xs) t
+ ordena ((x,(D d1 m1 a1)):(y,D d2 m2 a2):t) | (a1 == a2 && m1 == m2 && d1 < d2 ) = (x,(D d1 m1 a1)) : ordena (y, (D d2 m2 a2)) t
+                                            | (a1 == a2 && m1 < m2 ) = (x,(D d1 m1 a1)) : ordena (y,(D d2 m2 a2)) t
+                                            | (a1 < a2) = (x,(D d1 m1 a1)) : ordena (y,(D d2 m2 a2)) t
+                                            | otherwise = (y,(D d2 m2 a2)) : ordena (x,(D d1 m1 a1)) t 
 
 -- 5
 
