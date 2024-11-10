@@ -7,7 +7,7 @@ fromDigits [] = 0
 fromDigits l = aux (lenght l - 1) l 
 
 aux :: Int -> [Int] -> Int 
-aux e [] = 0 
+aux e [] = 0
 aux e (h:t) = h * 10^e + aux (e-1) t 
 
 fromDigits :: [Int] -> Int 
@@ -54,22 +54,69 @@ digitAlpha str = foldl separar ("", "") str
 
 
 --2 
-
 nzp :: [Int] -> (Int,Int,Int)
-nzp [] = [0,0,0]
-nzp x = aux [0,0,0] x
 
-aux :: (Int,Int,Int) -> [Int] -> (Int,Int,Int)
-aux (a,b,c) [] = (a,b,c)
-aux (a,b,c) (h:t) | h < 0 = (a+1,b,c)
-                  | h > 0 = (a,b,c+1)
-                  |otherwise = (a,b+1,c)
+nzp l = nzpaux (0,0,0) l
 
---3
+nzpaux :: (Int,Int,Int) -> [Int] -> (Int,Int,Int)
+nzpaux (x,y,z) [] = (x,y,z)
+nzpaux (x,y,z) (h:t) | h == 0 = nzpaux (x,y+1,z) t
+                     | h < 0 = nzpaux (x+1,y,z) t
+                     | otherwise = nzpaux (x,y,z+1) t
+
+--3 
 divMod :: Integral a => a -> a -> (a, a)
+-- fazer
 --4
-fromDigits :: [Int] -> (Int,Int)
-fromDigits (x:xs) = foldl (\(a,b) curr -> (a+curr*10^b,b+1) ) (0,0) (x:xs)
+
+fromDigits :: [Int] -> Int
+fromDigits [] = 0
+fromDigits (h:t) = h*10^(lenght t) + fromDigits t
+
+
+fromDigits :: [Int] -> Int
+fromDigits l = aux 0 (lenght l-1) l  
+
+aux :: Int -> [Int] -> Int
+aux x  y [] = x
+aux x  y (h:t) = aux (x + h*10^y) y-1 t 
+
+
+
+
+
+
+--5 se for numero negativo a aux do maxsuminit funciona? perguntar segunda se posso utilizar 0
+maxSumInit :: (Num a, Ord a) => [a] -> a
+maxSumInit l = maximum [sum m | m <- inits l]
+
+maxSumInit l = aux (head l) (ints l)
+
+aux :: (Num a, Ord a) => a -> [[a]] -> a
+aux x [] = x
+aux x (h:t) | x >= sum h = aux x t
+            | otherwise = aux (sum h) t
+
+
+sum :: (Num a, Ord a) => [a] -> a
+sum l = auxsum 0 l
+  
+auxsum :: (Num a, Ord a) => a -> [a] -> a
+auxsum x [] = x
+auxsum x (h:t) = auxsum (x+h) t 
+--7
+intToStr :: Integer -> String
+intToStr n
+  | n < 0     = '-' : intToStrAux (-n) ""  -- Se o número é negativo, adiciona '-' e converte o valor positivo
+  | n == 0    = "0"                        -- Caso especial para o número 0
+  | otherwise = intToStrAux n ""           -- Para números positivos, chama a função auxiliar
+
+-- Função auxiliar que converte um número positivo em uma string
+intToStrAux :: Integer -> String -> String
+intToStrAux 0 acc = acc                    -- Quando o número é 0, retorna o acumulador (inverte o número)
+intToStrAux num acc = intToStrAux (num `div` 10) (toEnum (fromEnum '0' + fromIntegral (num `mod` 10)) : acc)
+
+
 --8 a 
 [x | x <- [1..20], mod x 2 == 0, mod x 3 == 0]
   == [6,12,18]
