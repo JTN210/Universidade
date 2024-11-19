@@ -78,3 +78,50 @@ fromInteger :: Integer -> a
 fromInteger x =  F (fromInteger x) 1 
 
 
+--2
+data Exp a = Const a
+           | Simetrico (Exp a)
+           | Mais (Exp a) (Exp a)
+           | Menos (Exp a) (Exp a)
+           | Mult (Exp a) (Exp a)
+
+
+instance show Exp  where
+show :: Exp a -> String
+show (Const a) = show a 
+show (Simetrico x) = "-" ++ show x
+show (Mais e1 e2) = "(" ++ show e1 ++ " + " ++ show e2 ++ ")"
+show (Menos e1 e2) = "(" ++ show e1 ++ " - " ++ show e2 ++ ")"
+show (Mult e1 e2) = "(" ++ show e1 ++ " * " ++ show e2 ++ ")"
+
+
+instance Eq Exp a where
+(==) :: Exp a -> Exp a -> Bool
+ (Const a) == (Const b) = a == b
+(Simetrico x) == (Simetrico y) = x == y
+(Mais e1 e2) == (Mais e1' e2') = e1 == e1' && e2 == e2'
+(Menos e1 e2) == (Menos e1' e2') = e1 == e1' && e2 == e2'
+(Mult e1 e2) == (Mult e1' e2') = e1 == e1' && e2 == e2'
+_ == _ = False
+
+class (Eq a, Show a) => Num a where
+(+), (*), (-) :: a -> a -> a
+negate, abs, signum :: a -> a
+fromInteger :: Integer -> a
+
+instance Num a => Num (Exp a) where
+(+) e1 e2 = Mais e1 e2          -- Soma
+(-) e1 e2 = Menos e1 e2         -- Subtração
+(*) e1 e2 = Mult e1 e2          -- Multiplicação
+negate e = Simetrico e          -- Negativo
+abs e = e                       -- Mantém a expressão (abs é arbitrário aqui)
+signum e = e                    -- Mantém a expressão (signum é arbitrário aqui)
+fromInteger n = Const (fromInteger n) -- Constantes a partir de inteiros
+
+
+
+--3
+data Movimento = Credito Float | Debito Float
+data Data = D Int Int Int
+data Extracto = Ext Float [(Data, String, Movimento)]
+
