@@ -125,3 +125,31 @@ data Movimento = Credito Float | Debito Float
 data Data = D Int Int Int
 data Extracto = Ext Float [(Data, String, Movimento)]
 
+instance Ord Data where
+(<=) :: Data -> Data -> Bool
+--2024 12 12       2024 12 13
+ (D a1 m1 d1) <= (D a2 m2 d2) | a1 == a2 && m1 == m2 && d1 <= d2 = True
+                              | a1 == a2 && m1 < m2 = True 
+                              | a1 < a2 = True
+                              | otherwise = False 
+                            
+
+instance Show Data where
+show :: Data -> String
+show (D x y z) show x ++ "/" ++ show y ++ "/" ++ show z
+
+
+ordena :: Extracto -> Extracto
+ordena (Ext saldo movimentos) = Ext saldo (insertionSort movimentos)
+  where
+    insertionSort :: [(Data, String, Movimento)] -> [(Data, String, Movimento)]
+    insertionSort [] = []
+    insertionSort (x:xs) = insere x (insertionSort xs)
+
+    insere :: (Data, String, Movimento) -> [(Data, String, Movimento)] -> [(Data, String, Movimento)]
+    insere x [] = [x]
+    insere x (y:ys)
+      | fst3 x <= fst3 y = x : y : ys
+      | otherwise = y : insere x ys
+
+    fst3 (a, _, _) = a
