@@ -1,5 +1,5 @@
 
---1
+ --1
  data ExpInt = Const Int
              | Simetrico ExpInt
              | Mais ExpInt ExpInt
@@ -56,3 +56,66 @@ mirror (R x l) = R x (map mirror ( reverse l))
 data BTree a = Empty | Node a (BTree a) (BTree a)
 
 data LTree a = Tip a | Fork (LTree a) (LTree a)
+
+{-           Fork
+            /    \
+          Fork    Tip 5
+         /    \
+      Tip 3  Tip 4      
+-}
+
+ltSum :: Num a => LTree a -> a
+ltSum (Tip x) = x 
+ltSum (Fork x y) | ltSum x + ltSum y
+
+listaLT :: LTree a -> [a]
+listaLT (Tip x) = [x]
+listaLT (Fork x y) = listaLT x ++ listaLT y
+
+
+ltHeight :: LTree a -> Int
+ltHeight (Tip x) = 1
+ltHeight (Fork x y) = 1 + max (ltHeight x)  (ltHeight y)  
+
+--4 
+data BTree a = Empty | Node a (BTree a) (BTree a)
+    deriving Show
+
+data LTree a = Tip a | Fork (LTree a) (LTree a)
+    deriving Show
+
+data FTree a b = Leaf b | No a (FTree a b) (FTree a b)
+    deriving Show
+
+-- Função para dividir uma FTree em uma BTree e uma LTree
+splitFTree :: FTree a b -> (BTree a, LTree b)
+splitFTree (Leaf x) = (Empty, Tip x)
+splitFTree (No a e d) = 
+    let (be, le) = splitFTree e 
+        (bd, ld) = splitFTree d
+    in (Node a be bd, Fork le ld)
+
+-- Exemplo de uma FTree
+exampleFTree :: FTree Char Int
+exampleFTree = No 'A'
+                (No 'B'
+                    (Leaf 3)
+                    (Leaf 4)
+                )
+                (Leaf 5)
+
+-- Função principal para imprimir as árvores resultantes
+main :: IO ()
+main = do
+    putStrLn "Árvore binária rotulada com dois tipos (FTree):"
+    print exampleFTree
+    let (bTree, lTree) = splitFTree exampleFTree
+    putStrLn "Árvore BTree resultante:"
+    print bTree
+    putStrLn "Árvore LTree resultante:"
+    print lTree
+
+
+
+joinTrees :: BTree a -> LTree b -> Maybe (FTree a b)
+joinTrees
