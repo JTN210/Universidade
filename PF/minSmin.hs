@@ -30,10 +30,9 @@ exampleBST = Node 10
 
 minSmin :: Ord a => BTree a -> (a,BTree a)
 minSmin (Node r Empty d) = (r, d)
-minSmin (Node r (Node re Empty de) d) = (re, Node r de d)
-minSmin (Node r (Node re ee de) d) = 
+minSmin (Node r e d) = 
                         let 
-                            (res, t) = minSmin (Node re ee de)
+                            (res, t) = minSmin e
 
                         in  (res, Node r t d)
 
