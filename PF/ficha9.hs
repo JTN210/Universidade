@@ -1,2 +1,72 @@
-randomIO :: Random a => IO a
-randomRIO :: Random a => (a,a) -> IO a
+import System.Random 
+import Data.List (delete)
+--randomIO :: Random a => IO a
+--randomRIO :: Random a => (a,a) -> IO a
+
+{- bingo :: IO ()
+bingo = do
+            x <- randomRIO(1,90)
+            print x 
+            getline -- espera que o utilizador carregue no ENTER
+            bingo 
+
+
+bingo=bingoA []
+bingoA :: [Int] -> IO ()
+bingoA l  | length l == 90 = return ()
+bingoA l = do 
+            x <- randomRIO(1,90)
+            if ( elem x l) then bingoA l
+            else do print x 
+            getline 
+            bingoA (x:l)
+ 
+
+bingo = bingoB [1..90]
+bingoB :: [Int] -> IO ()
+bingoB [] = return ()
+bingoB l= do 
+    x <- randomRIO(1,90)
+     if elem x l
+        then do  
+            print x
+-} 
+
+
+
+bingo = bingoB [1..90]
+bingoB :: [Int] -> Int -> IO () -- recebe a lista e o comprimento da lista n
+bingoB [] _  = return ()
+bingoB l n = do i <- randomRIO (0, n-1)
+                let ( a,x:b) = splitAt i l
+                putStrLn (show x)
+                getLine
+                bingoB (a ++ b) (n-1) 
+
+main :: IO()
+main = bingoB [1..90] 90
+
+
+
+wordle :: String -> IO Int 
+wordle x = wordleC 1 x 
+wordleC :: Int -> String -> IO Int 
+wordleC n x = do 
+          y <-  getLine 
+        if x == y then  do 
+                        putStrLn "Parabens"
+                        return n -- n= numero de tentativas em que acertou
+        else do let r = compareStrings x y 
+                    putStrLn r 
+                    wordleC (n+1) x 
+
+
+
+compareStrings :: String -> String -> String
+compareStrings [] [] = []
+compareStrings (x:xs) (y:ys)
+    | x == y    = toUpper y : compareStrings xs ys
+    | x != y && elem y (x:xs) = y : compareStrings xs ys   
+    | otherwise = "*" : compareStrings xs ys           
+
+---- tem uma cena mal porque se for tipo tudo "casa" "aaaa" vai dar "aAaA" e devia dar (*A*A)
