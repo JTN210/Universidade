@@ -1,4 +1,4 @@
-import System.Random 
+{- import System.Random 
 import Data.List (delete)
 --randomIO :: Random a => IO a
 --randomRIO :: Random a => (a,a) -> IO a
@@ -71,26 +71,30 @@ compareStrings (x:xs) (y:ys)
 
 ---- tem uma cena mal porque se for tipo tudo "casa" "aaaa" vai dar "aAaA" e devia dar (*A*A)
 
--- no teste pode saie função que multiplique matrizes
+-- no teste pode saie função que multiplique matrizes -}
 
 
 data Aposta = Ap [Int] (Int,Int)
 
 
-valida :: Aposta -> Bool
+valida :: [Int] -> (Int,Int) -> Bool
 -- ver se tem 5 numeros/ 2 estrelas, ver se ta dentro de 1/50 e 1/9 e ver se n existe repetições
-valida Ap [] _ = False 
-valida Ap _ () = False 
-valida Ap (x:xs) (a,b) |  a < 1 || b < 1 || a > 9 || b > 9  = False 
+valida [] _ = False  
+valida (x:xs) (a,b) |  a < 1 || b < 1 || a > 9 || b > 9  = False 
                        | a == b = False 
-                       | verifica (x:xs) = False  
                        | length (x:xs) > 5 || length (x:xs) < 5 = False 
-                       | -- falta ver se ta dentro do range
+                       | not (verifica (x:xs)) = False 
+                       | not (tamanho (x:xs) ) = False 
  
 
 verifica :: [Int] -> Bool
 verifica [] = True 
-verifica (x:y:[]) |x == y = False
-                  | otherwise = True
-verfica (x:y:xs) | x == y = False 
-                 | otherwise = verifica (x:xs) && verifica (y:xs)
+verifica (x:xs) | elem x xs = False
+                | otherwise = verifica xs
+
+tamanho :: [Int] -> Bool
+tamanho [] = True
+tamanho (x:xs)  | x < 1 || x > 50 = False 
+                | otherwise = tamanho xs 
+
+
