@@ -70,3 +70,27 @@ compareStrings (x:xs) (y:ys)
     | otherwise = "*" : compareStrings xs ys           
 
 ---- tem uma cena mal porque se for tipo tudo "casa" "aaaa" vai dar "aAaA" e devia dar (*A*A)
+
+-- no teste pode saie função que multiplique matrizes
+
+
+data Aposta = Ap [Int] (Int,Int)
+
+
+valida :: Aposta -> Bool
+-- ver se tem 5 numeros/ 2 estrelas, ver se ta dentro de 1/50 e 1/9 e ver se n existe repetições
+valida Ap [] _ = False 
+valida Ap _ () = False 
+valida Ap (x:xs) (a,b) |  a < 1 || b < 1 || a > 9 || b > 9  = False 
+                       | a == b = False 
+                       | verifica (x:xs) = False  
+                       | length (x:xs) > 5 || length (x:xs) < 5 = False 
+                       | -- falta ver se ta dentro do range
+ 
+
+verifica :: [Int] -> Bool
+verifica [] = True 
+verifica (x:y:[]) |x == y = False
+                  | otherwise = True
+verfica (x:y:xs) | x == y = False 
+                 | otherwise = verifica (x:xs) && verifica (y:xs)
