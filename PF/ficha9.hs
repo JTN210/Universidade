@@ -1,5 +1,5 @@
 {- import System.Random 
-import Data.List (delete)
+import Data.List (delete) -}
 --randomIO :: Random a => IO a
 --randomRIO :: Random a => (a,a) -> IO a
 
@@ -34,7 +34,7 @@ bingoB l= do
 
 
 
-bingo = bingoB [1..90]
+{- bingo = bingoB [1..90]
 bingoB :: [Int] -> Int -> IO () -- recebe a lista e o comprimento da lista n
 bingoB [] _  = return ()
 bingoB l n = do i <- randomRIO (0, n-1)
@@ -67,11 +67,11 @@ compareStrings [] [] = []
 compareStrings (x:xs) (y:ys)
     | x == y    = toUpper y : compareStrings xs ys
     | x != y && elem y (x:xs) = y : compareStrings xs ys   
-    | otherwise = "*" : compareStrings xs ys           
+    | otherwise = "*" : compareStrings xs ys     -}       
 
 ---- tem uma cena mal porque se for tipo tudo "casa" "aaaa" vai dar "aAaA" e devia dar (*A*A)
 
--- no teste pode saie função que multiplique matrizes -}
+-- no teste pode saie função que multiplique matrizes 
 
 
 data Aposta = Ap [Int] (Int,Int)
@@ -98,3 +98,20 @@ tamanho (x:xs)  | x < 1 || x > 50 = False
                 | otherwise = tamanho xs 
 
 
+comuns :: Aposta -> Aposta -> (Int,Int)
+--  que dada uma aposta e uma chave, calcula quantos n´umeros e quantas estrelas existem em comum nas duas apostas
+comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) = (comparaA (x:xs) (y:ys),comparaB (a,b) (c,d) )
+
+
+comparaA :: [Int] -> [Int] -> Int 
+comparaA [] _ = 0
+comparaA _ [] = 0
+comparaA (x:xs) (y:ys) | elem x (y:ys) = 1 + comparaA xs (y:ys)
+                       | otherwise = comparaA xs (y:ys)
+
+
+
+comparaB :: (Int,Int) -> (Int,Int) -> Int 
+comparaB (a,b) (c,d) | ((a == c) || (a == d)) && ((b == c) || (b == d)) = 2  
+                     | (a == c) || (a == d) || (b == c) || (b == d) = 1
+                     | otherwise = 0
