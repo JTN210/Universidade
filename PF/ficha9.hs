@@ -118,34 +118,33 @@ comparaB (a,b) (c,d) | ((a == c) || (a == d)) && ((b == c) || (b == d)) = 2
 
 
 
--- data Aposta = Ap [Int] (Int, Int)
+ --data Aposta = Ap [Int] (Int, Int)
 
-{- instance Eq Aposta where
+ {-   instance Eq Aposta where
     (==) :: Aposta -> Aposta -> Bool
     (Ap nums1 (a1, b1)) == (Ap nums2 (a2, b2)) =
-        nums1 == nums2 && (a1 == a2 && b1 == b2 || a1 == b2 && b1 == a2)
+        nums1 == nums2 && (a1 == a2 && b1 == b2 || a1 == b2 && b1 == a2) 
 
 -- mas a utilizar a função comuns fica 
 (Ap nums1 (a1, b1)) == (Ap nums2 (a2, b2)) =
-comuns (Ap nums1 (a1, b1))  (Ap nums2 (a2, b2)) == (5,2)
+comuns (Ap nums1 (a1, b1))  (Ap nums2 (a2, b2)) == (5,2) -}
 
 
 premio :: Aposta -> Aposta -> Maybe Int
-premio (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) 
-| comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (5,2) = Just 1
-| comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (5,1) = Just 2
-| comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (5,0) = Just 3
-| comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (4,2) = Just 4
-| comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (4,1) = Just 5
-| comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (4,0) = Just 6
-| comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (3,2) = Just 7
-| comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (2,2) = Just 8
-| comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (3,1) = Just 9
-| comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (3,0) = Just 10
-| comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (1,2) = Just 11
-| comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (2,1) = Just 12
-| comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (2,0) = Just 13
-|otherwise = Nothing -}
+premio (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) | comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (5,2) = Just 1
+                                           | comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (5,1) = Just 2
+                                           | comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (5,0) = Just 3
+                                           | comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (4,2) = Just 4
+                                           | comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (4,1) = Just 5
+                                           | comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (4,0) = Just 6
+                                           | comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (3,2) = Just 7
+                                           | comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (2,2) = Just 8
+                                           | comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (3,1) = Just 9   
+                                           | comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (3,0) = Just 10
+                                           | comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (1,2) = Just 11
+                                           | comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (2,1) = Just 12
+                                           | comuns (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) == (2,0) = Just 13
+                                           |otherwise = Nothing 
 
 
 -- a função words :: String -> [String] transforma "1 2 3 4 5" em ["1", "2", "3", "4", "5"].
@@ -172,3 +171,15 @@ leAposta = do
     else do
       putStrLn "Aposta inválida. Tente novamente."
       leAposta
+
+
+
+joga :: Aposta -> IO ()
+joga chave = do 
+    putStrLn $ "Faça a sua Aposta:"
+    aposta <- leAposta
+    let (numerosComuns,estrelasComuns) = comuns aposta chave 
+    putStrLn $ "Numeros iguais: " ++ show numerosComuns
+    putStrLn $ "Estrelas iguais " ++ show estrelasComuns
+    putStrLn $ "O seu premio é " ++ show (premio aposta chave)
+
