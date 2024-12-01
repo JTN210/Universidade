@@ -1,8 +1,8 @@
-{- import System.Random 
-import Data.List (delete) -}
---randomIO :: Random a => IO a
---randomRIO :: Random a => (a,a) -> IO a
+import System.Random (randomRIO)
 
+
+data Aposta = Ap [Int] (Int, Int)
+    deriving (Show)
 {- bingo :: IO ()
 bingo = do
             x <- randomRIO(1,90)
@@ -74,8 +74,6 @@ compareStrings (x:xs) (y:ys)
 -- no teste pode saie função que multiplique matrizes 
 
 
-data Aposta = Ap [Int] (Int,Int)
-
 
 valida :: [Int] -> (Int,Int) -> Bool
 -- ver se tem 5 numeros/ 2 estrelas, ver se ta dentro de 1/50 e 1/9 e ver se n existe repetições  
@@ -118,8 +116,6 @@ comparaB (a,b) (c,d) | ((a == c) || (a == d)) && ((b == c) || (b == d)) = 2
 
 
 
- --data Aposta = Ap [Int] (Int, Int)
-
  {-   instance Eq Aposta where
     (==) :: Aposta -> Aposta -> Bool
     (Ap nums1 (a1, b1)) == (Ap nums2 (a2, b2)) =
@@ -152,7 +148,7 @@ premio (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) | comuns (Ap (x:xs) (a,b)) (Ap (y:ys)
 
 
 -- Função principal que lê e valida uma aposta
-leAposta :: IO Aposta
+{- leAposta :: IO Aposta
 leAposta = do
   putStrLn "Digite 5 números distintos entre 1 e 50 (separados por espaço):"
   numerosInput <- getLine
@@ -181,5 +177,25 @@ joga chave = do
     let (numerosComuns,estrelasComuns) = comuns aposta chave 
     putStrLn $ "Numeros iguais: " ++ show numerosComuns
     putStrLn $ "Estrelas iguais " ++ show estrelasComuns
-    putStrLn $ "O seu premio é " ++ show (premio aposta chave)
+    putStrLn $ "O seu premio é " ++ show (premio aposta chave) -}
 
+
+geraChave :: IO Aposta
+geraChave = do
+            numeros <- geraNumeros 5 (1,50)
+            estrelas <- geraNumeros 2 (1,9)
+            return (Ap numeros (head estrelas, estrelas !! 1))
+            
+
+geraNumeros :: Int -> (Int,Int) -> IO [Int]
+geraNumeros 0 _ = return []
+geraNumeros n x = do
+                    num <- randomRIO x 
+                    resto <- geraNumeros (n-1) x 
+                    if elem num resto then geraNumeros n x 
+                    else return (num : resto)
+
+main :: IO ()
+main = do
+    chave <- geraChave
+    putStrLn $ "Chave gerada: " ++ show chave
