@@ -144,7 +144,7 @@ premio (Ap (x:xs) (a,b)) (Ap (y:ys) (c,d)) | comuns (Ap (x:xs) (a,b)) (Ap (y:ys)
 
 
 -- a função words :: String -> [String] transforma "1 2 3 4 5" em ["1", "2", "3", "4", "5"].
--- a instacia read basicamente passa uma String lista de strings em coisas neste caso em inteiros
+-- a instancia read basicamente passa uma String lista de strings em coisas neste caso em inteiros
 
 
 -- Função principal que lê e valida uma aposta

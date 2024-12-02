@@ -1,4 +1,6 @@
-zipWith :: (a->b->c) -> [a] -> [b] -> [c]
+type Mat a = [[a]]
+
+{- zipWith :: (a->b->c) -> [a] -> [b] -> [c]
 zipWith f [] [] = []
 zipWith f _ [] = []
 zipWith f [] _ = []
@@ -24,7 +26,6 @@ type Polinomio = [Monomio]
 type Monomio = (Float,Int)
 
 selgrau :: Int -> Polinomio -> Polinomio
-+
 
 
 
@@ -56,3 +57,27 @@ dimMat (x:xs) = dimMataux (lenght x,0) xs
 dimMataux :: (Int,Int) -> Mat a -> (Int,Int)
 dimMataux (a,b) [] = (a,b)
 dimMataux (a,b) (x:xs) = dimMataux (a,b+1) xs 
+
+-- esta ta mal porque no escolhe n t, é uma lista de listas e n uma lista
+transposta :: Mat a -> Mat a 
+transposta [] = []
+transposta (h:t) = aux 0 (h:t) 
+
+aux :: Int -> Mat a -> Mat a 
+aux _ [] = []
+aux n (h:t) = (escolhe n h : escolhe n t) : aux (n+1) (h:t) 
+
+escolhe :: Int -> [Int] -> Int 
+escolhe n (h:t) | n == 0 = h 
+                | n > 0 = escolhe (n-1) t -}
+
+transposta :: Mat a -> Mat a 
+transposta [] = []
+transposta ([]:_) = []
+transposta m = (map head m) : transposta (map tail m)
+
+--Elas estao distribuidas por linhas só que nos queremos as linhas da primeira e as colunas da segunda, então na segunda fazemos a transposta
+produto ::Num a => Mat a -> Mat a -> Mat a 
+produto x y = let m1 = x 
+                  m2 = transposta y 
+                  in [[sum (zipWith (*) linha coluna) | coluna <- m2] | linha <- m1 ]
