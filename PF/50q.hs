@@ -245,24 +245,53 @@ menor _ "" = False
 menor (h:t) (x:xs) | h < x = True 
                    | h == x = menor t xs 
                    | otherwise = False 
-                 
 
+--39
+elemMSet :: Eq a => a -> [(a,Int)] -> Bool
+elemMSet n [] = False 
+elemMSet n ((a,b):t) | n == a = True
+                     | n != a = elemMSet n t 
+                     | otherwise = False
 
+--40 
+converteMSet :: [(a,Int)] -> [a]
+converteMSet [] = ""
+converteMSet [(a,1):t] = a : converteMSet t  
+converteMSet ((a,b):t) = a : converteMSet ((a,b - 1): t)
 
+--41 
+insereMSet :: Eq a => a -> [(a,Int)] -> [(a,Int)]
+insereMSet x [] = [(x,1)]
+insereMSet x ((a,b): t) | x == a = ((a,b + 1): t)
+                        | otherwise = (a,b) : insereMSet x t 
 
+--42
+removeMSet :: Eq a => a -> [(a,Int)] -> [(a,Int)]
+removeMSet x [] = []
+removeMSet x ((a,b):t) | x == a && b <= 1 = t 
+                       | x == a && b > 1 = ((a,b-1):t)
+                       | x != a = (a,b) : removeMSet x t 
+                       | otherwise = ((a,b):t) 
 
+--43 
+constroiMSet :: Ord a => [a] -> [(a,Int)]
+constroiMSet [] = []
+constroiMSet (h:t) = insereMSet h (constroiMSet t)
 
+--44 
+partitionEithers :: [Either a b] -> ([a],[b])
+partitionEithers [] = ([],[])
+partitionEithers Left x = ([x],[])
+partitionEithers Right x = ([],[x])
 
-
---ja foi 50 questão 
+--45 
 catMaybe :: [Maybe a] -> [a]
 catMaybe [] = []
 catMaybe (Nothing x:t) = catMaybe t 
 catMaybe (Just x :t) = x : catMaybe t 
 
---35
-lookup :: Eq a => a -> [(a,b)] -> Maybe b
- --lookup 4 [(2,"a"),(4,"b"),(5,"c")] = Just b
-lookup _ [] = Nothing 
-lookup x ((y,ys):t) | x == y = Just ys
-                    | otherwise = lookup x t
+--46
+data Movimento = Norte | Sul | Este | Oeste
+               deriving Show   
+
+caminho :: (Int,Int) -> (Int,Int) -> [Movimento]
