@@ -163,8 +163,8 @@ delete _ [] = []
 delete x (h:t) | x == h = t 
                | otherwise = h : delete x t
 
-
-
+--28
+(\\):: Eq a => [a] -> [a] -> [a]
 
 
 --ja foi 50 questão 
