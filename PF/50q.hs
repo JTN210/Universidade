@@ -15,13 +15,12 @@ enumFromThenTo start next end
 
 --3
 (++) :: [a] -> [a] -> [a]
-(++) = [] y = y
-(++) = (h:t) y = h : (++) t y
+(++) [] y = y
+(++) (h:t) y = h : (++) t y
 
 --4
- (!!) :: [a] -> Int -> a
- (!!) [] _ = []
- (!!) (h:t) x | x == 0 = h
+(!!) :: [a] -> Int -> a
+(!!) (h:t) x | x == 0 = h
               | otherwise = (!!) t x-1
 
 --5 
@@ -109,7 +108,7 @@ idade :: Int -> Int -> [(Sring, Int)] -> [String]
 idade _ _ [] = []
 idade a b ((x,xs):t) | 
                      | (a-xs) >= b = x : idade a b t  
-                     |otherwise = idade a b t 
+                     | otherwise = idade a b t 
 
 --20
 powerEnumFrom :: Int -> Int -> [Int]
@@ -165,6 +164,94 @@ delete x (h:t) | x == h = t
 
 --28
 (\\):: Eq a => [a] -> [a] -> [a]
+(\\) [] x = x
+(\\) _ [] = []
+(\\) (x:xs) (y:ys) | x == y = (\\) xs ys 
+                   | otherwise = (\\) y : (\\) (x:xs) (ys) 
+
+--29
+union :: Eq a => [a] -> [a] -> [a]
+union x (h:t) | elem h x = union x t 
+              | otherwise = union (x ++ [h]) t
+
+--30 intersect [1,1,2,3,4] [1,3,5] corresponde a [1,1,3]
+intersect :: Eq a => [a] -> [a] -> [a]
+intersect [] x = []
+intersect x [] = x 
+intersect (x:xs) (y:ys) | elem x (y:ys) = x : intersect xs (y:ys)
+                        | otherwise = intersect xs (y:ys)  
+
+--31
+insert :: Ord a => a -> [a] -> [a]
+insert x [] = [x]
+insert x (h:t) | x < h = (x:h:t)
+               | otherwise = h : insert x t 
+
+--32 
+unwords :: [String] -> String
+unwords [] = ""
+unwords (h:t) = h ++ " " ++ unwords t 
+
+--33
+unlines :: [String] -> String
+unwords [] = "\n"
+unwords (h:t) = h ++ "\n" ++ unlines t 
+
+--34 
+pMaior :: Ord a => [a] -> Int
+pMaior (x:y:z) = (encontra (f (x:y:z)) (x:y:z))
+
+
+f :: Ord a => [a] -> Int
+f [x] = x 
+f (x:y:z) | x >= y = f (x:z)
+          | otherwise = f (y:z)
+
+
+encontra :: Ord a => Int -> [a] -> Int
+encontra x (h:t) | x == h = 0 
+                 | otherwise = 1 + encontra x t 
+
+
+--35 lookup ’a’ [(’a’,1),(’b’,4),(’c’,5)] corresponde `a lista Just 1
+lookup :: Eq a => a -> [(a,b)] -> Maybe b
+lookup n [] = Nothing 
+lookup n ((a,b):t) | n == a = Just b 
+                   | otherwise = lookup n t 
+
+--36 
+preCrescente :: Ord a => [a] -> [a]
+preCrescente [] = []
+preCrescente [x] = [x]
+preCrescente (x:xs:t) | x < xs = x : preCrescente xs t 
+                      | otherwise = [x] 
+
+--37 
+iSort :: Ord a => [a] -> [a]
+iSort [] = []
+iSort (h:t) = insert h (iSort t)
+
+
+
+insert :: Ord a => a -> [a] -> [a]
+insert x [] = [x]
+insert x (h:t) | x < h = (x:h:t)
+               | otherwise = h : insert x t 
+
+--38
+menor :: String -> String -> Bool
+menor "" _ = True
+menor _ "" = False 
+menor (h:t) (x:xs) | h < x = True 
+                   | h == x = menor t xs 
+                   | otherwise = False 
+                 
+
+
+
+
+
+
 
 
 --ja foi 50 questão 
@@ -179,6 +266,3 @@ lookup :: Eq a => a -> [(a,b)] -> Maybe b
 lookup _ [] = Nothing 
 lookup x ((y,ys):t) | x == y = Just ys
                     | otherwise = lookup x t
-
-
-sss
