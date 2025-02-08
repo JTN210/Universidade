@@ -71,13 +71,13 @@ int main(){
 
 
 */
-/// 3
-
+/// 3 n percebi como se faz a segunda metade 
+/*
 int main(){
  int i,j,n = 5;
 for(i = 0; i < n; i++)
    {
-      for(j = 0;j < i +1; j++)
+      for(j = 0;j < i + 1; j++)
       {
          putchar('#');
 
@@ -85,5 +85,38 @@ for(i = 0; i < n; i++)
 
       putchar('\n');
    }
+for (i = n-1 ;i >0; i--)
+   {
+      for (j = 0;j < i; j++)
+      {
+         putchar('#');
+
+      }
+      putchar('\n');
+
+   }
+}
+*/
+//// tambem n sei como se faz
+
+int main(){
+   int i,j,n = 5;
+
+   for (int i = 1; i <= n; i++) {
+      for (int j = 0; j < n - i; j++) {
+          putchar(' ');
+      }
+      for (int j = 0; j < (i*2-1); j++) {
+          putchar('#');
+      }
+      putchar('\n');
+  }
+
 
 }
+
+
+
+
+
+
