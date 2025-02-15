@@ -1,13 +1,12 @@
 import Data.Char
 import Data.List
 
-length :: [Int] -> Int
-length [] = 0
-length (h:t) = 1 + length t 
+lengtho :: [Int] -> Int
+lengtho [] = 0
+lengtho (h:t) = 1 + lengtho t 
 
 
-reverse :: [Int] -> [Int]
-reverse [] = []
-reverse(x:y) = (y:x)
-reverse (h:t) = h : reverse t 
+reverso :: [a] -> [a]
+reverso [] = []
+reverso (h:t) = reverso t ++ [h]
 

@@ -96,7 +96,7 @@ for (i = n-1 ;i >0; i--)
 
    }
 }
-*/
+
 //// tambem n sei como se faz
 
 int main(){
@@ -114,9 +114,71 @@ int main(){
 
 
 }
+*/
 
 
 
+/// feito por mim mas mais melhor aprendido triangulo vertical
+/*
+int main(){
+   int j,i,N=5;
+    for(i = 0; i < N; i++){
+        for(j = 0; j < i + 1; j++){
 
+            putchar('#');
+        }
+    
+        putchar('\n');
+    }
 
+    for(i= 0; i < N ; i++){
+        for(j= 0; j < N - i-1 ; j++){
+                putchar('#');
 
+        }
+
+                putchar('\n');
+    }
+    return 0;
+}
+    */
+
+/*
+int main(){
+    int N = 5;
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < N; j++)
+        {
+            
+        }
+        putchar('\n');
+    }
+    
+
+    return 0;
+}
+    */
+/// triangulo feito like a doctor 
+    int main(){
+        int i, N = 5;
+        for( i= 0; i < N; i++){
+            for (int j = 0; j < N - i - 1; j++)
+            {
+                putchar(' ');
+            }
+            for ( int j = 0; j <i + 1; j++)
+            {
+                putchar('#');
+            }
+            
+            for ( int j = 1; j < i + 1; j++)
+            {
+                putchar('#');
+            }
+            
+           putchar('\n');
+        }
+
+        return 0;
+    }

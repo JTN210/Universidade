@@ -27,7 +27,7 @@ enumFromThenTo start next end
 reverse :: [a] -> [a]
 reverse [] = []
 reverse (x:y) = (y:x)
-reverse (h:t) reverse t : h
+reverse (h:t) = reverse t : h
 
 --6
 take :: Int -> [a] -> [a]
