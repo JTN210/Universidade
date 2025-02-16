@@ -158,7 +158,6 @@ int main(){
 
     return 0;
 }
-    */
 /// triangulo feito like a doctor 
     int main(){
         int i, N = 5;
@@ -182,3 +181,42 @@ int main(){
 
         return 0;
     }
+*/
+
+#include <stdio.h>
+
+int desenha_circulo(int raio) {
+    int x, y, count = 0;
+    
+    // Dimensão da matriz 2D (consideramos um quadrado de lado 2*raio)
+    int diametro = 2 * raio;
+
+    for (y = -raio; y <= raio; y++) {
+        for (x = -raio; x <= raio; x++) {
+            // Verifica se o ponto (x, y) está dentro do círculo
+            if (x * x + y * y <= raio * raio) {
+                printf("#");
+                count++;
+            } else {
+                printf(" ");
+            }
+        }
+        printf("\n");
+    }
+
+    return count;
+}
+
+int main() {
+    int raio;
+    
+    // Pede o raio ao usuário
+    printf("Digite o raio do círculo: ");
+    scanf("%d", &raio);
+
+    // Chama a função e imprime o número de caracteres
+    int num_chars = desenha_circulo(raio);
+    printf("\nTotal de '#' impressos: %d\n", num_chars);
+
+    return 0;
+}
