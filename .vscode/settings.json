@@ -1,0 +1,4 @@
+{
+    "C_Cpp.default.compilerPath": "{     \"configurations\": [         {             \"name\": \"WSL\",             \"includePath\": [                 \"/usr/include\",                 \"/usr/local/include\",                 \"${workspaceFolder}/**\"             ],             \"defines\": [],             \"compilerPath\": \"/usr/bin/gcc\",             \"cStandard\": \"c11\",             \"cppStandard\": \"c++17\",             \"intelliSenseMode\": \"linux-gcc-x64\"         }     ],     \"version\": 4 }",
+    "C_Cpp.errorSquiggles": "enabled"
+}
