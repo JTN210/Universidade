@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h> 
 #include <stdlib.h>
-
+#include <assert.h>
 float prodEx1 (int n,float m){
 int i,k = 0;
 
@@ -54,8 +54,36 @@ int mdc1(int a,int b){
 }
 
 
+int mdc2(int a, int b){
+
+    while (a != 0 && b !=0)
+    {
+        if (a > b)
+        {
+            a = a - b;
+        }
+        else
+        {
+            b = b - a;
+        }
+        
+    }
+    if (a == 0)
+    {
+        return b;
+    }
+    else
+    {
+        return a;
+    }
+
+}
+
 int main(){
 
-    printf("\nMDC: %d\n", mdc1(45,18));
+    //printf("\nMDC: %d\n", mdc2(45,18));
+    assert(mdc2(45,18) == 9); /// o assert é como se fosse um teste, e se tiver bem n aparece nada se tiver mal para de correr o codigo 
     return 0;
 }
+
+//ex 5
