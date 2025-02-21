@@ -87,3 +87,9 @@ int main(){
 }
 
 //ex 5
+void Ex5(int a, int b){
+
+
+
+    
+}
