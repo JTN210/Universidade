@@ -3,9 +3,9 @@
 #include <stdlib.h>
 
 float prodEx1 (int n,float m){
-int i,N= 2,m = 5,k = 0;
+int i,k = 0;
 
-    for(i= 0; i <N;i++)
+    for(i= 0; i <n;i++)
     {
         k += m;
     }
@@ -28,7 +28,34 @@ float prodEx2(int N,float m){
 
 
 int mdc1(int a,int b){
- 
+    int i, menor;
+    if (a < b)
+    {
+        menor = a;
+    }
+    else
+    {
+        menor = b;
+    }
+    for (i = menor; i >= 1; i--)
+    {
+        if (a % i == 0 && b % i == 0)
+        {
+            return menor;
+        }
+        else
+        {
+            menor--;
+        }
+        
+    }
+    
+    return 1;
+}
 
 
+int main(){
+
+    printf("\nMDC: %d\n", mdc1(45,18));
+    return 0;
 }
