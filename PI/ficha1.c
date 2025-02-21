@@ -1,25 +1,22 @@
 #include <stdio.h>
-/*int main() {
-for (int i = 0; i <6; i++)
+
+void quadrado(int n) {
+for (int i = 0; i <n; i++)
    {
-    for (int j = 0; j < 6; j++)
+    for (int j = 0; j < n; j++)
     {putchar('*');
     
     }
     putchar('\n');
    } 
-
-return 0;
-
-
 }
-*/
-/// 2
- /// feito a ladrão 
-/*
-int main(){
 
-   for(int i = 0; i < 5; i++)
+
+/// 2
+/// feito a ladrão 
+void xadrez(int n){
+
+   for(int i = 0; i < n; i++)
    {
      
       for(int j = 0; j < 1; j++)
@@ -38,14 +35,11 @@ int main(){
       putchar('\n');
 
    }
-   return 0;
-
 }
 
 /// feito direito
 
-int main(){
-      int n = 5;
+void Xardrez1(int n){
    for(int i = 0; i < n; i++)
    {
      
@@ -65,16 +59,13 @@ int main(){
       putchar('\n');
 
    }
-   return 0;
-
 }
 
 
-*/
-/// 3 n percebi como se faz a segunda metade 
-/*
-int main(){
- int i,j,n = 5;
+// 3 n percebi como se faz a segunda metade 
+
+void triangulo_deitado (int n){
+ int i,j;
 for(i = 0; i < n; i++)
    {
       for(j = 0;j < i + 1; j++)
@@ -99,8 +90,8 @@ for (i = n-1 ;i >0; i--)
 
 //// tambem n sei como se faz
 
-int main(){
-   int i,j,n = 5;
+void triangulo(int n){
+   int i,j;
 
    for (int i = 1; i <= n; i++) {
       for (int j = 0; j < n - i; j++) {
@@ -114,14 +105,11 @@ int main(){
 
 
 }
-*/
-
 
 
 /// feito por mim mas mais melhor aprendido triangulo vertical
-/*
-int main(){
-   int j,i,N=5;
+void triangulo_vertical(int n){
+   int j,i,N;
     for(i = 0; i < N; i++){
         for(j = 0; j < i + 1; j++){
 
@@ -139,28 +127,11 @@ int main(){
 
                 putchar('\n');
     }
-    return 0;
 }
-    */
 
-/*
-int main(){
-    int N = 5;
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < N; j++)
-        {
-            
-        }
-        putchar('\n');
-    }
-    
-
-    return 0;
-}
 /// triangulo feito like a doctor 
-    int main(){
-        int i, N = 5;
+    void triangulo_doutor(int n){
+        int i,N;
         for( i= 0; i < N; i++){
             for (int j = 0; j < N - i - 1; j++)
             {
@@ -179,11 +150,7 @@ int main(){
            putchar('\n');
         }
 
-        return 0;
     }
-*/
-
-#include <stdio.h>
 
 int desenha_circulo(int raio) {
     int x, y, count = 0;
