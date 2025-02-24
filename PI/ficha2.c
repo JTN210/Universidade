@@ -99,7 +99,7 @@ void ex5(int a, int b){
     return (a+b);
 }
 
-int escDiv(int 0, intv[]){
+int escDiv(int n, int v[]){
     int r = 0;
     int v[n];
     for (int i = 1; i <= n/2;i++)
