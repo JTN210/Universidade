@@ -1,3 +1,4 @@
+package Ficha2;
 
 public class Ficha2Ex1 {
     
