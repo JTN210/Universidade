@@ -106,7 +106,7 @@ int *aux(int v[], int r)
     return ret;
 }
 
-int *escDiv(int n)
+int *escDiv(int n, int* enderecotamamho)
 {
     int r = 0;
     int v[n];
@@ -118,7 +118,7 @@ int *escDiv(int n)
             r++;
         }
     }
-
+    *enderecotamamho = r;
     return aux(v, r);
 }
 
@@ -129,8 +129,10 @@ int main()
     assert(mdc1(45, 18) == 9);
     assert(mdc2(45, 18) == 9); /// o assert é como se fosse um teste, e se tiver bem n aparece nada se tiver mal para de correr o codigo
     assert(prodEx2(10, 42.5) == 425);
-    int *a = escDiv(28);
-    for (int i = 0; i < 5; i++)
+    int tamanho;
+    int *a = escDiv(40, &tamanho);
+
+    for (int i = 0; i < tamanho; i++)
     {
         printf("%d ", a[i]);
     }
