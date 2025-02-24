@@ -1,34 +1,35 @@
 #include <stdio.h>
-#include <math.h> 
+#include <math.h>
 #include <stdlib.h>
 #include <assert.h>
-float prodEx1 (int n,float m){
-int i;
-float k = 0;
+float prodEx1(int n, float m)
+{
+    int i;
+    float k = 0;
 
-    for(i= 0; i <n;i++)
+    for (i = 0; i < n; i++)
     {
         k += m;
     }
-  return k;
+    return k;
 }
-float prodEx2(int N,float m){
+float prodEx2(int N, float m)
+{
     float r = 0;
-    while (N !=0)
+    while (N != 0)
     {
-        if (N %2 != 0)
+        if (N % 2 != 0)
         {
             r += m;
         }
         N = N / 2; // N = N >> 1 12 = 1,2 mas como tamos a tratar de inteiros 12 = 1,0
-        m = m*2;  // m = m << 1 avança uma casa para a esquerda 25 = 250
+        m = m * 2; // m = m << 1 avança uma casa para a esquerda 25 = 250
     }
-    return r;  
-
+    return r;
 }
 
-
-int mdc1(int a,int b){
+int mdc1(int a, int b)
+{
     int i, menor;
     if (a < b)
     {
@@ -48,16 +49,15 @@ int mdc1(int a,int b){
         {
             menor--;
         }
-        
     }
-    
+
     return 1;
 }
 
+int mdc2(int a, int b)
+{
 
-int mdc2(int a, int b){
-
-    while (a != 0 && b !=0)
+    while (a != 0 && b != 0)
     {
         if (a > b)
         {
@@ -67,7 +67,6 @@ int mdc2(int a, int b){
         {
             b = b - a;
         }
-        
     }
     if (a == 0)
     {
@@ -77,11 +76,10 @@ int mdc2(int a, int b){
     {
         return a;
     }
-
 }
 
-
-void ex5(int a, int b){
+void ex5(int a, int b)
+{
     int maior;
 
     while (a != 0 && b != 0)
@@ -94,34 +92,48 @@ void ex5(int a, int b){
         {
             b = b % a;
         }
-
     }
-    return (a+b);
+    return (a + b);
 }
 
-int escDiv(int n, int v[]){
+int *aux(int v[], int r)
+{
+    int *ret = malloc(sizeof(int) * r);
+    for (int i = 0; i < r; i++)
+    {
+        ret[i] = v[i];
+    }
+    return ret;
+}
+
+int *escDiv(int n)
+{
     int r = 0;
     int v[n];
-    for (int i = 1; i <= n/2;i++)
+    for (int i = 1; i <= n / 2; i++)
     {
-        if (n % i == 0 )
+        if (n % i == 0)
         {
             v[r] = i;
             r++;
         }
-        
     }
-    return 0;
+
+    return aux(v, r);
 }
 
+int main()
+{
 
-int main(){
-
-    //printf("\nMDC: %d\n", mdc2(45,18));
-    assert(mdc1(45,18) == 9);
-    assert(mdc2(45,18) == 9); /// o assert é como se fosse um teste, e se tiver bem n aparece nada se tiver mal para de correr o codigo 
-    assert(prodEx2(10,42.5) == 425);
-    printf("%d\n", escDiv(28));
+    // printf("\nMDC: %d\n", mdc2(45,18));
+    assert(mdc1(45, 18) == 9);
+    assert(mdc2(45, 18) == 9); /// o assert é como se fosse um teste, e se tiver bem n aparece nada se tiver mal para de correr o codigo
+    assert(prodEx2(10, 42.5) == 425);
+    int *a = escDiv(28);
+    for (int i = 0; i < 5; i++)
+    {
+        printf("%d ", a[i]);
+    }
+    printf("\n");
     return 0;
 }
-
