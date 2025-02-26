@@ -1,11 +1,4 @@
-#include <string.h>
 #include "pessoas.h"
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 int main(int argc, char* argv[]){
 
@@ -21,20 +14,17 @@ int main(int argc, char* argv[]){
 
     if ( strcmp(argv[1],"-i") == 0 )
     {
-        int res = new_person(argv[2], atoi(argv[3]));
-        snprintf(id, 20,  "registo %d\n", res);
-        write(STDOUT_FILENO, id, sizeof(id));
+        return inserePessoa(argv[2], atoi(argv[3])); //atoi passa de string para inteiro, quando escreves no terminal para executar um ficheiro, aquilo é uma string, como o inserePessoa recebe um inteiro tens de passar para inteiro
     }
 
     if ( strcmp(argv[1],"-l") == 0 )
     {
-        int res = list_n_persons(atoi(argv[2]));
-        snprintf()
+       return listaPessoas(atoi(argv[2]));
     }
 
     if ( strcmp(argv[1],"-u") == 0 )
     {
-        // TO DO
+        return atualizaPessoa(argv[2], atoi(argv[3]));
     }
 
     if ( strcmp(argv[1],"-o") == 0 )
