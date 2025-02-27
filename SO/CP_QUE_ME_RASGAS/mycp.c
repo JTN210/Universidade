@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     while((n_read = read(src, &buffer, SIZE)) != 0)
 		write(dest, &buffer, n_read);
 
-
+    free(buffer);
     close(src);
     close(dest);
 
