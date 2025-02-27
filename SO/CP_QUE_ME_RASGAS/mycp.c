@@ -15,13 +15,11 @@ int main(int argc, char *argv[])
     ssize_t n_read = 0;
     char buffer[SIZE];
 
-
-
-
     while((n_read = read(src, &buffer, SIZE)) != 0)
-		write(dest, &buffer, n_read);
+    {
+		  write(dest, &buffer, n_read);
+    }
 
-    free(buffer);
     close(src);
     close(dest);
 
