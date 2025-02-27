@@ -17,4 +17,6 @@ int inserePessoa(char *nome, int idade);
 
 int listaPessoas(int n);
 
-int atualizaPessoa(char*nome, int idade);
+int atualizaPessoa(char *nome, int idade);
+
+int registoPessoa(int reg,int idade);

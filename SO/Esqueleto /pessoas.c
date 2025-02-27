@@ -29,7 +29,7 @@ int main(int argc, char* argv[]){
 
     if ( strcmp(argv[1],"-o") == 0 )
     {
-        // TO DO
+        return registoPessoa(atoi(argv[2]),atoi(argv[3]));
     }
 
     return 0;
