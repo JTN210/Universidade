@@ -61,13 +61,12 @@ int valueExists(int **matrix, int value) {
         {
             if (WEXITSTATUS(status)==0)
             {
-                printf("O Processo %d encontrou o valor\n",pid);
+                printf("O Processo %d encontrou o valor %d\n",pid,value);
                 return 1;
             }
         }
-          
     }
-
+    printf("O valor não foi encontrado na matriz.\n");
     
 
 

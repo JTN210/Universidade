@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
     // print matrix
     printMatrix(matrix);
 
-    // TO DO
+    valueExists(matrix,10);
 
     // free matrix
     for (int i = 0; i < ROWS; i++) {
