@@ -78,5 +78,5 @@ int valueExists(int **matrix, int value) {
 // ex.6
 void linesWithValue(int **matrix, int value) {
 
-    // TO DOm
+    // TO DO
 }
