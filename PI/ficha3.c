@@ -45,7 +45,7 @@ int maximum(int v[], int N, int *m){
     }
     *m = v[0];
     
-    for (int i = 0; i < N; i++)
+    for (int i = 1; i < N; i++)
     {
         if(v[i] > *m)
         {
@@ -83,8 +83,6 @@ void pascal(int v[], int N) {
         }
     }
 }
-
-#include <stdio.h>
 
 // Função para imprimir as N primeiras linhas do Triângulo de Pascal
 void imprimeTrianguloPascal(int N) {
@@ -171,5 +169,5 @@ int N = 5;
 imprimeTrianguloPascal(N);
 
 return 0;
-}
 */
+}
