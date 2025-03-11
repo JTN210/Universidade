@@ -132,14 +132,52 @@ int duplicaVogais(char *s){
 }
 
 int duplicaVogais2(char *s){
+    int novo = 0,atual = 0, duplicadas = 0;
 
-
-    return 0;
+    while (s[atual] != '\0')
+    {
+        if (!SerVogal(s[atual]))
+        {
+            atual++;
+        }
+        else if (SerVogal(s[atual]) && ((s[atual] == s[atual-1]) ||(s[atual] == s[atual+1])))
+        {
+            atual++;
+        }
+        else
+        {
+            atual++;
+            duplicadas++;
+        }
+        
+    }
+    return duplicadas;
 }
+
+
+
+int ordenado (int v[], int N){
+    int res = 1, i = 0;
+    while ( i < N)
+    {
+        if ((v[i] > v[i+1]) )
+        {
+            res = -1;
+        }
+        i++;
+    }
+    return res;
+}
+
+
 int main()
 {
-    char c[BUFSIZ] = "Esta e uma string com duplicados";
-    printf("%d\n", duplicaVogais(c));
-    printf("%s\n", c);
+    /* char c[BUFSIZ] = "Esta e uma string com duplicados";
+    printf("%d\n", duplicaVogais2(c));
+    printf("%s\n", c); */
+
+    int v[BUFSIZ] = {1,2,3,5,5,6,7,8};
+    printf("%d\n", ordenado(v,7));
+
     return 0;
 }
