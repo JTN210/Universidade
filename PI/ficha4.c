@@ -169,15 +169,58 @@ int ordenado (int v[], int N){
     return res;
 }
 
+void merge(int a[], int na, int b[], int nb, int r[]) {
+    int N = na + nb;
+    int pA = 0, pB = 0;
 
+    for(int total = 0; total < N; total++) {
+        if (pB >= nb) r[total] = a[pA++];
+        else if (pA >= na) r[total] = b[pB++];
+        else if (b[pB] > a[pA]) r[total] = a[pA++];
+        else r[total] = b[pB++];
+    }
+}
+int partition(int v[], int N, int x){
+    int novo = 0;
+    int auxiliar[BUFSIZ];
+    for(int i = 0; i < N; i++)
+    {
+        if (v[i] <= x)
+        {
+        auxiliar[novo] = v[i];
+        novo++;
+        }
+    }
+    int Segundametade = novo;
+    for (int i = 0; i < N; i++)
+    {
+        if (v[i] > x)
+        {
+            auxiliar[Segundametade] = v[i];
+            Segundametade++;
+        }
+    }
+    for (int i = 0; i < N; i++)
+    {
+        v[i] = auxiliar[i];
+    }
+    return novo;
+}
 int main()
 {
     /* char c[BUFSIZ] = "Esta e uma string com duplicados";
     printf("%d\n", duplicaVogais2(c));
-    printf("%s\n", c); */
-
-    int v[BUFSIZ] = {1,2,3,5,5,6,7,8};
-    printf("%d\n", ordenado(v,7));
-
+    printf("%s\n", c); 
+    int v[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    int N = sizeof(v)/sizeof(v[0]);
+    int x = 5;
+    int pos = partition(v, N, x);
+    printf("Array apos partition:\n");
+    for (int i = 0; i < N; i++) {
+        printf("%d ", v[i]);
+    }
+    printf("\n");  
+    printf("Numero de elementos <= %d = %d\n", x, pos);
+    */
     return 0;
 }
