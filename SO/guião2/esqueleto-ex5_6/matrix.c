@@ -108,7 +108,7 @@ void linesWithValue(int **matrix, int value) {
             found = 1;
         }
     }
-    if (!found) 
+    if (found == 0) 
     {
         printf("Perde-mos Familia, não encontra-mos o valor.\n");
     }
