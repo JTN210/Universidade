@@ -97,10 +97,49 @@ int retiraVogaisRep2(char *s){
     return removidas;
 }
 
+
+int duplicaVogais(char *s){
+    int duplicadas = 0,novo = 0;
+    int t = strlen (s);
+    char auxiliar [BUFSIZ];
+    for (int i = 0; s[i] != '\0'; i++)
+    {
+        if (SerVogal(s[i]) && (s[i] == s[i-1]) ||(s[i] == s[i+1]) )
+        {
+            auxiliar[novo] = s[i];
+            novo++;
+        }
+        else if (!SerVogal(s[i]))
+        {
+            auxiliar[novo] = s[i];
+            novo++;
+        }
+        else
+        {
+            auxiliar[novo] = s[i];
+            novo++;
+            auxiliar[novo] = s[i];
+            novo++;
+            duplicadas++;
+        }
+        
+    }
+    auxiliar[novo] = '\0';
+
+
+    strcpy(s,auxiliar);
+    return duplicadas;
+}
+
+int duplicaVogais2(char *s){
+
+
+    return 0;
+}
 int main()
 {
-    char c[] = "Estaa e umaa string coom duuuuplicadoos";
-    printf("%d\n", retiraVogaisRep2(c));
+    char c[BUFSIZ] = "Esta e uma string com duplicados";
+    printf("%d\n", duplicaVogais(c));
     printf("%s\n", c);
     return 0;
 }
