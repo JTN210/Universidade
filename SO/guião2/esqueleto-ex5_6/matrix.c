@@ -70,6 +70,7 @@ int valueExists(int **matrix, int value) {
 // ex.6
 void linesWithValue(int **matrix, int value) {
     int status, matches[ROWS];
+    pid_t pid, filhos[ROWS];
     // Inicializa o array matches com 0 (nenhuma linha encontrada ainda)
     for (int i = 0; i < ROWS; i++) 
     {
@@ -77,21 +78,25 @@ void linesWithValue(int **matrix, int value) {
     }
     for (int i = 0; i < ROWS; i++)
     {
-        if (fork() == 0)
+        if ((pid = fork()) == 0)
         {
             for (int j = 0; j < COLUMNS; j++)
             {
                 if (matrix[i][j] == value)
-                {
+                   {
                     _exit(i);
                 }
             }
             _exit(-1);
         }
+        else
+        {
+            filhos[i] = pid;
+        }       
     }
     for (int i = 0; i < ROWS; i++)
     {
-        pid_t pid = wait(&status);
+        waitpid(filhos[i], &status, 0);
         int linha = WEXITSTATUS(status);
         if (linha != 255)
         {
@@ -110,6 +115,6 @@ void linesWithValue(int **matrix, int value) {
     }
     if (found == 0) 
     {
-        printf("Perde-mos Familia, não encontra-mos o valor.\n");
+        printf("Valor não encontrado.\n");
     }
 }
