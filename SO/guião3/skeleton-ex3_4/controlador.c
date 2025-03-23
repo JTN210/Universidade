@@ -2,7 +2,27 @@
 #include "mysystem.h"
 
 void controller(int N, char** commands) {
-	// TO DO
+pid_t fork_ret;
+int status;
+int pids[N];
+for (int i = 0; i < N; i++)
+{
+	fork_ret = fork();
+
+	if (fork_ret == 0)
+	{
+		int counter = 0;
+		int res = 1;
+		while (res > 0)
+		{
+			res = mysystem(commands[i]);
+
+		}
+		
+	}
+	
+}
+
 }
 
 int main(int argc, char* argv[]) {

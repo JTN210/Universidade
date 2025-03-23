@@ -87,15 +87,48 @@ void swap(Aluno *x, Aluno *y) {
 }
 void ordenaPorNum(Aluno t[], int N) {
     int i,j;
-    for (i = 0; i < N-1; i++) {
-        for (j = i+1; j < N; j++) {
-            if (t[j].numero < t[i].numero) swap(t+i, t+j);
+    for (i = 0; i < N-1; i++) 
+    {
+        for (j = i+1; j < N; j++) 
+        {
+            if (t[j].numero < t[i].numero)
+            {
+                swap(t+i, t+j);
+            } 
         }
     }
 }
 
 void criaIndPorNum(Aluno t [], int N, int ind[]){
+    int indices[N];
+    for (int i = 0; i < N; i++)
+    {
+        indices[i] = i;
+    }
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; i < N; j++)
+        {
+            if (t[j].numero < t[i].numero)
+            {
+                swap(indices+i, indices+j);
+            }    
+            ind[indices[i]] = i;
+        }   
+    }   
+}
 
+
+void imprimeTurma (int ind[], Aluno t[], int N){
+    for (int i = 0; i < N; i++)
+    {
+        int idx = ind[i];
+        printf("Numero: %d Nome: %s Teste: %d MiniTeste: ", t[idx].numero, t[idx].nome, t[idx].teste);
+        for (int j = 0; i < 6; j++)
+        {
+            printf("%d ", t[idx].miniT);
+        }
+    }
 }
 int main(){
 Aluno turma[5] = {

@@ -35,14 +35,33 @@ int q2(){
 
 
 int q3(){
-
-
+    int l, max = 0, sec = 0;
+    scanf("%d", &l);
+    max = l;
+    while (l != 0)
+    {   
+        scanf("%d",&l);
+        if ( l > max)
+        {
+            sec = max;
+            max = l;
+        }
+        else if (l < max && l > sec)
+        {
+            sec = l;
+        }
+    }  
+   printf("%d\n", sec);
+    return sec;
+}
+    
+int q4(unsigned int n){
 
     return 0;
 }
-        
 int main(){
    // q1(99999999);
    // q2(99999999);
+      q3(99999999);
     return 0;
 }

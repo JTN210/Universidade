@@ -4,7 +4,7 @@
 int main() {
 
     char comando1[] = "ls -l -a -h";
-    char comando2[] = "sleeep 30";
+    char comando2[] = "sleep 30";
 	char comando3[] = "sleep 10";
 	char comando4[] = "ps";
 	int ret;
