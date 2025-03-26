@@ -16,9 +16,9 @@ for (int i = 0; i < N; i++)
 		while (res > 0)
 		{
 			res = mysystem(commands[i]);
-
+			counter++;
 		}
-		
+		_exit(counter);
 	}
 	
 }
