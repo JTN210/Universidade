@@ -21,7 +21,7 @@ int listaPessoas(int n)
     Pessoa p;
 
     int fd = open(bd, O_RDONLY, 0600);
-
+    
     for (int r = 0; r < n && read(fd, &p, sizeof(Pessoa)) > 0; r++)
     {
         printf("Registo: %d ---- Nome: %s ---- idade: %d\n", r, p.nome, p.idade);
