@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
+
 int main (int argc, char** argv){
     int fdin = open("/etc/passwd", O_RDONLY);
     int fdout = open ("saida.txt", O_CREAT | O_TRUNC | O_WRONLY , 0666);
@@ -17,15 +18,7 @@ int main (int argc, char** argv){
     ssize_t bytes_read = 0;
     char buffer[1024];
 
-    while ((bytes_read = read(0, buffer, sizeof(buffer))) > 0) {
-        write(1, &buffer, bytes_read);
-        write(2, &buffer, bytes_read);
-    }
-    dup2(original_fdin, 0); close(original_fdin);
-    dup2(original_fdout, 1); close(original_fdout);
-    dup2(original_fderr, 2); close(original_fderr);
-
-    printf("Terminei \n");
-
+    execlp("wc", "wc", NULL); 
+    
     return 0;
 }
