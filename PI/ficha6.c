@@ -12,7 +12,7 @@ typedef struct staticStack STACK, *SStack;
 
 void SinitStack(SStack s){
 
-    s -> sp = 0;
+    s -> sp = 0;    
 }
 
 int SisEmpty(SStack s){

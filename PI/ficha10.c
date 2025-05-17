@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+
+
+typedef struct nodo {
+    int valor;
+    struct nodo *esq, *dir;
+    } * ABin;
+
+
+    ABin removeMenor (ABin *a){
+        ABin anterior, temp = *a;
+        if ( *a == NULL)
+        {
+            return NULL;
+        }   
+        while ((*a) -> esq != NULL)
+        {
+            anterior = temp;
+            temp = temp -> esq;
+        }
+        anterior -> esq = temp -> dir;
+        return temp;   
+    }
+
+    void removeRaiz (ABin *a){
+
+        if ((*a) -> esq == NULL)
+        {
+            (*a) = (*a) -> dir
+        }
+        else if ((*a) -> dir == NULL)
+        {
+            (*a) = (*a) -> esq;
+        }
+        else
+        {
+            ABin temp = (*a)->dir;
+            ABin ant = *a;
+            while (temp->esq != NULL)
+            {
+                ant = temp;
+                temp = temp->esq;
+            }
+            if (ant == *a) 
+            {
+                ant->dir = temp->dir;
+            } 
+            else 
+            {
+                ant->esq = temp->dir;
+            }
+            (*a)->valor = temp->valor;
+            free(temp);
+        }        
+    }
+
+    int removeElem (ABin *a, int x){
+        if ((*a) == NULL)
+        {
+            return NULL;
+        }
+        
+        else if (((*a)-> valor == x))
+        {
+            removeRaiz((*a));
+            return 0;
+        }
+        else if ((*a)-> valor < x)
+        {
+            ABin nova = (*a) -> dir;
+            if (!removeElem(&(nova),x))
+            {
+                (*a)-> dir = nova; 
+                return 0;
+            }
+            return -1;
+        }
+        else
+        {
+            ABin nova = (*a) -> esq;
+            if (!removeElem(&(nova),x))
+            {
+                (*a) -> esq = nova;
+                return 0;
+            }   
+        }
+        return -1;
+    }
+
+    /// falta acabar

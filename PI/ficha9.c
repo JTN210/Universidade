@@ -118,7 +118,6 @@ struct nodo *procura (ABin a, int x){
        return esqaux = procuraE(a->esq,x);
     }
 }       
-// mal feita
 int nivel (ABin a, int x){
     int n = 0;
     while (a != NULL && a->valor != x) {
@@ -130,6 +129,17 @@ int nivel (ABin a, int x){
 }
 
 void imprimeAte (ABin a, int x){
+    if (a == NULL) {
+        return;
+    }
+
+    imprimeAte(a->esq, x);
+
+    if (a->valor < x) 
+    {
+        printf("%d ", a->valor);
+        imprimeAte(a->dir, x);
+    }
 
 }
 
