@@ -15,7 +15,14 @@ typedef struct nodo {
         if ( *a == NULL)
         {
             return NULL;
-        }   
+        }
+        if (temp -> esq == NULL)
+        {
+            anterior = temp -> dir;
+            (*a) = anterior;
+            return temp;
+        }
+    
         while ((*a) -> esq != NULL)
         {
             anterior = temp;
@@ -90,4 +97,21 @@ typedef struct nodo {
         return -1;
     }
 
-    /// falta acabar
+    /// falta acabar        
+void rodaEsquerda(ABin *a){        
+    ABin b =(*a) -> dir;
+    (*a)->dir = b->esq;
+    b->esq = (*a);
+    *a = b;
+}
+
+
+void rodaDireita(ABin *a){        
+    ABin b =(*a) -> esq;
+    (*a) -> esq = b -> dir;
+    b -> dir = (*a);
+    *a = b;
+}
+
+
+

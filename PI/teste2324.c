@@ -126,4 +126,4 @@ ABin folhaEsq(ABin a){
 int parentesisOk(char exp[]){
 
     
-}
+}  
