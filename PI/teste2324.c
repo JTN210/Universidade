@@ -127,3 +127,35 @@ int parentesisOk(char exp[]){
 
     
 }  
+
+
+
+int procura(LInt *l, int x){
+    int res = 0; LInt inicio = *l; LInt anterior = NULL;
+    LInt curr = *l;
+    if (inicio == NULL)
+    {
+        return res;
+    }
+    
+    if (inicio -> valor == x)
+    {
+        res = 1;
+        return res;
+    }
+    
+    while (curr != NULL)
+    {
+        anterior = curr;
+        curr = curr -> prox;
+
+        if (curr -> valor == x)
+        {
+            anterior -> prox = curr -> prox;
+            curr -> prox = inicio;
+            res = 1;
+        }
+    }   
+    *l = curr;
+    return res;
+}
