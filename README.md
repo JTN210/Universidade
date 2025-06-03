@@ -1,2 +1,3 @@
-# lume
-muito calor
+# Material de Estudo
+ 
+Universidade do Minho LCC
