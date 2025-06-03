@@ -7,7 +7,7 @@ int inserePessoa(char *nome, int idade)
     p.idade = idade;
     strcpy(p.nome, nome);
 
-    int fd = open(bd, O_CREAT | O_WRONLY | O_APPEND, 0660);
+    int fd = open(bd, O_CREAT | O_WRONLY | O_APPEND, 0600);
     ssize_t bytes_escritos = write(fd, &p, sizeof(Pessoa));
     printf("%ld\n", bytes_escritos);
 

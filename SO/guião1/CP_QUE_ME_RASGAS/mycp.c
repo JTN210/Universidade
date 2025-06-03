@@ -10,7 +10,7 @@
 int main(int argc, char *argv[])
 {   
 
-    int src = open(argv[1], O_RDONLY);
+    int src = open(argv[1], O_RDONLY,0600);
     int dest = open(argv[2], O_CREAT | O_WRONLY, 0666);
     ssize_t n_read = 0;
     char buffer[SIZE];
