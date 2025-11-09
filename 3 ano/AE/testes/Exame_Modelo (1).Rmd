@@ -1,0 +1,322 @@
+---
+title: "Exame Modelo — EDA, Regressão Linear e Regularização (2 horas)"
+author: "Nome do/a aluno/a: __________________"
+date: "`r format(Sys.Date(), '%d-%m-%Y')`"
+output:
+  html_document:
+#    toc: true
+ #   toc_depth: 2
+  pdf_document: default
+editor_options:
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, fig.width = 7, fig.height = 4.6)
+set.seed(123)
+```
+
+# Instruções
+
+* **Duração:** 2 horas.
+* **Entregar:** este `.Rmd` com **código** e **respostas** (texto + figuras).
+* **Dados usados:** `gapminder`, `babynames`, `ggplot2::diamonds`, `ISLR2::Hitters`.
+
+```{r pacotes}
+# Instalar se necessário
+req <- c("tidyverse","broom","gapminder","babynames","glmnet","ISLR2","GGally","scales","janitor")
+new <- setdiff(req, rownames(installed.packages()))
+if(length(new)) install.packages(new)
+
+library(tidyverse)
+library(dplyr)
+library(broom)
+library(gapminder)
+library(babynames)
+library(glmnet)
+library(rsample) 
+library(ISLR2)
+library(GGally)
+library(scales)
+library(janitor)
+```
+
+---
+
+# Parte A — EDA & Visualização
+
+## A1. Gapminder: padrões globais
+
+**Dados:** `gapminder::gapminder`.
+
+```{r A1-data}
+gp <- gapminder::gapminder |> janitor::clean_names()
+glimpse(gp)
+```
+
+**a)** Crie um **gráfico de dispersão** de `life_exp` vs `gdp_percap` para todos os anos, com:
+
+* eixo do PIB em **escala log10** (`scale_x_log10()`),
+* **transparência** (ex.: `alpha = 0.3`) para reduzir sobreposição,
+* **facet por continente**,
+* **linha de tendência** simples (`geom_smooth(se = FALSE)`).
+  *Explique tendências gerais e diferenças por continente.*
+
+```{r A1a}
+# Seu código aqui
+ggplot(gp,aes(x=life_exp,y=gdp_percap))+
+  geom_point(alpha=0.3)+
+  scale_x_log10()+
+  geom_smooth(method = "lm",se=FALSE)
+```
+
+**b)** Escolha **3 países** de **continentes distintos** e faça um **gráfico de linhas ao longo do tempo** para `life_exp` (com pontos nos anos observados).
+*Comente a evolução comparada.*
+
+```{r A1b}
+# Seu código aqui
+ggplot(gp|>filter(country %in% c("Bangladesh","Portugal","Brazil")),
+       aes(x=year,y=life_exp,color=country)
+       )+geom_line()
+#podemos observar que todos os paises sejam eles de que continem forem a esperança media de vida aumenta, podemos ver ainda que o pais europeu foi o que aumentou mais, o da america tambem cresce bastante e a asia tambem crence mas crensce menos tambem por ser um pais em desenvolvimento.
+```
+
+**c)** Para o ano **2007**, compare as distribuições de `life_exp` por continente usando **boxplot**.
+*Comente níveis típicos e dispersão por continente.*
+
+```{r A1c}
+# Seu código aqui
+gp_2007<-gp|>filter(year==2007)
+ggplot(gp_2007,aes(x=continent,y=life_exp,color=continent,fill=continent))+
+  geom_boxplot()
+#como podemos ver no grafico no ano de 2007, cada continte teve uma evoluçao,sendo a maior delas em africa pois a mesma aumento quase 10 anos, a segunda maior foi asia que a mesma teve um aumentot ambem de aproximadamente 10 anos e depos temos america e eurooa com um aumento significativo de 5 anos, podemos tambem observar a ociania que a mesma teve um aumento redusido pois a mesma sempre teve uma esperança media de vida relativamente alta .
+```
+
+
+---
+
+## A2. Babynames: diversidade de nomes
+
+**Dados:** `babynames::babynames`.
+
+```{r A2-data}
+bb <- babynames::babynames |> janitor::clean_names()
+glimpse(bb)
+View(bb)
+```
+
+**a)** Escolha **5 nomes** (de ambos os sexos) e faça **séries temporais** (1900–2015) de `prop` por `year`, com **facets por nome** e **linhas suaves**.
+*Descreva um padrão.*
+
+```{r A2a}
+# Seu código aqui
+bb_escol<-bb|>filter(name %in% c('Mary','Owen','Emma','Morris','Anna'),year>=1900,year<=2015)
+
+ggplot(bb_escol,aes(x=year,y=prop),color=name)+
+  geom_line()+
+  geom_smooth(se=FALSE,linetype="dashed")
+#como podemos observar no grafico com o passar dos anos a diversidade de nomes que eram dados aos bebes tem aumentendo fazendo assim com que pessoas com o mesmo nome sejam mais raras e assim podemos entao ver que o grafico tem um decrescimo a partir do ano 1925
+```
+
+**b)** Para um sexo à escolha (`sex` = "F" ou "M"), construa um **diagrama de barras** para os 5 **nomes** mais comuns.
+*Indique um padrão temporal.*
+
+```{r A2b}
+# Seu código aqui
+top5_f<-bb|>
+  filter(sex=="F")|>
+  group_by(name)|>
+  summarise(total=sum(n))|>
+  arrange(desc(total))|>
+  slice_head(n=5)
+head(top5_f)
+top5_m<-bb|>
+  filter(sex=="M")|>
+  group_by(name)|>
+  summarise(total=sum(n))|>
+  arrange(desc(total))|>
+  slice_head(n=5)
+head(top5_m)
+
+papo<-bb|>filter(sex=="F",name %in% top5_f$name)
+
+ggplot(papo,aes(x=year,y=prop),fill=name)+
+  geom_col(position = "dodge")
+
+papo2<-bb|>filter(sex=="M",name %in% top5_m$name)
+ggplot(papo2,aes(x=year,y=prop),fill=name)+
+  geom_col(position = "dodge")
+
+#podemos ver que ambos descem com o passar do tempo isso pode ser um indicador que aumentou a diversidade de nomes que e chamada aos chavalos,contudo podemos tambem ver que no nomes femininos tivemos um aumento repentino nums certos anos enqunaot no masculino foi sempre homogeneo
+```
+
+
+---
+
+# Parte B — Regressão Linear
+
+## B1. Diamonds: preço e características 
+
+**Dados:** `ggplot2::diamonds`. Objetivo: prever `log(price)`.
+
+```{r B1-data}
+data("diamonds", package = "ggplot2")
+dm <- diamonds |> janitor::clean_names() |> mutate(log_price = log(price))
+
+```
+
+**a)** Ajuste o modelo base:
+$$
+\log(\text{price}) \sim \text{carat} + \text{cut} + \text{color} + \text{clarity}.
+$$
+*Reporte **RMSE** e **R²** em treino e teste.*
+
+```{r B1a}
+# Seu código aqui
+split<-initial_split(dm,prop=0.8)
+treino<-training(split)
+teste<-testing(split)
+mod_tr<-lm(log_price~carat+cut+color+clarity,data=treino)
+summary(mod_tr)
+#rmse=0.3393 r=0.8884
+mod_t<-lm(log_price~carat+cut+color+clarity,data=teste)
+summary(mod_t)
+#rmse=0.3373 r=0.889
+```
+
+**b)** Adicione a **interação** `carat:clarity`.
+*Compare **AIC** e **R² ajustado** com o modelo base e discuta o **trade-off complexidade vs ajuste**.*
+
+```{r B1b}
+# Seu código aqui
+mod_tr2<-lm(log_price~carat*clarity+cut+color,data=treino)
+mod_t2<-lm(log_price~carat*clarity+cut+color,data=teste)
+
+AIC(mod_tr,mod_tr2)
+AIC(mod_t,mod_t2)
+
+summary(mod_tr)$adj.r.squared
+summary(mod_tr2)$adj.r.squared
+
+summary(mod_t)$adj.r.squared
+summary(mod_t2)$adj.r.squared
+
+#como podemos ver em ambos os modelos e melhor
+```
+
+**c)** Faça **diagnóstico visual** (resíduos vs ajustados, QQ-plot, *scale-location*).
+*Identifique 2 problemas potenciais.*
+
+```{r B1c}
+# Seu código aqui
+plot(mod_t2,which = 1)
+plot(mod_t2,which = 2)
+#nao homogeneo?
+plot(mod_tr2,which = 1)
+plot(mod_tr2,which = 2)
+```
+
+**d)** Produza um **efeito parcial**: curvas previstas de `log(price)` vs `carat` para **3 níveis de `clarity`** (fixe `cut` e `color` em categorias comuns). Inclua **IC 95%** com `geom_ribbon`.
+*Comente.*
+
+```{r B1d}
+# Seu código aqui
+#??
+```
+
+**e)** **Interprete** dois coeficientes do melhor modelo (um coeficiente de uma variável contínua e um coeficiente de uma variável categórica), indicando unidades/escala e implicação no **preço**.
+*Resposta textual abaixo.*
+
+**Interpretação (B1e):**
+*Escreva aqui.*
+
+---
+
+# Parte C — Regularização: Ridge e Lasso
+
+## C1. Hitters (ISLR2): salários no basebol
+
+**Dados:** `ISLR2::Hitters`. Resposta: `log(Salary)`. Remova linhas com `NA` em `Salary`.
+
+```{r C1-data}
+ht <- as_tibble(ISLR2::Hitters) |> janitor::clean_names() |> drop_na(salary) |>
+  mutate(log_salary = log(salary))
+
+```
+
+**a)** Ajuste **Ridge** com `cv.glmnet(..., nfolds = 10)`.
+*Indique o `lambda.min` e o **RMSE de teste** (na escala de `log_salary`).*
+
+```{r C1a}
+# Seu código aqui
+X<-model.matrix(log_salary~.,ht)
+Y<-ht$log_salary
+modelo_ridge_cv <- cv.glmnet(
+  x=X,
+  y=Y,
+  alpha=0,
+  nfolds = 10
+)
+
+pred_ridge<-predict(modelo_ridge_cv,s="lambda.min",newx = X)
+rmse_ridge<-Metrics::rmse(actual=Y,predicted = pred_ridge)
+
+pred_ridge
+rmse_ridge
+```
+
+**b)** Ajuste **Lasso** com *cross-validation*.
+*Indique `lambda.min`, e **RMSE de teste** para ambos.*
+
+```{r C1b}
+# Seu código aqui
+modelo_lasso_cv <- cv.glmnet(
+  x=X,
+  y=Y,
+  alpha=1,
+  nfolds = 10
+)
+
+pred_lasso_min<-predict(
+  modelo_lasso_cv,
+  s="lambda.min",
+  newx = X
+)
+
+modelo_lasso_cv$lambda.min
+rmse_lasso<-Metrics::rmse(actual=Y,predicted=pred_lasso_min)
+rmse_lasso
+#perguntar a stora se tenho de fazer treino e teste
+```
+
+**c)** Liste as **variáveis selecionadas** com o Lasso (com base no lambda.min).
+
+```{r C1c}
+# Seu código aqui
+coef_lasso <- coef(modelo_lasso_cv,s="lambda.min")
+
+coef_lasso_df <-data.frame(
+  term=rownames(coef_lasso),
+  estimate=as.numeric(coef_lasso)
+) |>
+  dplyr::filter(estimate!=0)
+
+coef_lasso_df
+```
+
+**d)** Compare **OLS vs Ridge vs Lasso** (use o mesmo *split*).
+*Discuta **viés–variância**, **colinearidade** e **parcimónia**.
+
+```{r C1d}
+# Seu código aqui
+modelo_ols<-lm(log_salary~.,ht)
+pred_ols <- predict(modelo_ols, newdata = ht)
+rmse_ols <- Metrics::rmse(ht, pred_ols)
+
+tibble(
+  Modelo = c("OLS", "Ridge", "Lasso"),
+  RMSE = c(rmse_ols, rmse_ridge, rmse_lasso),
+  Lambda = c(NA, modelo_ridge_cv$lambda.min, modelo_lasso_cv$lambda.min)
+)
+```
+

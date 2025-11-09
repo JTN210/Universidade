@@ -17,6 +17,7 @@ modelo <- lm(flipper_length_mm ~bill_length_mm, data = peng)
 summary(modelo)
 
 126.6844+1.6902*45
+
 predict(modelo, newdata = data.frame(bill_length_mm = 45), interval = "prediction")
 
 
@@ -76,3 +77,4 @@ modelo2
 
 ggplot(gm,aes (x = log(gdpPercap), y = lifeExp)) +
   geom_point() + geom_smooth(method = "lm")
+
