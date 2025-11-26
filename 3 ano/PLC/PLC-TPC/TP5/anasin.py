@@ -22,7 +22,7 @@ T  → F T2
 T2 → * F T2 
     | / F T2 
     | ε
-F  → NUM 
+F  → NUM
     | ( P1 )
 '''       
 def processa_P1():
