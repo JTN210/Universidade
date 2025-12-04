@@ -303,7 +303,26 @@ P=\begin{bmatrix}1 &amp; r &amp; 0\\ r &amp; 1 &amp; 0\\ 0 &amp; 0 &amp; 1\end{b
 \]</span> 1. Determine as <strong>três CPs</strong>.</p>
 <ol start="2" type="1">
 <li class="fragment"><p>Discuta a importância em função de <span class="math inline">\(r\)</span>.</p></li>
-<li class="fragment"><p>Compare com (A) e comente o efeito de <span class="math inline">\(X_3\)</span> ser <strong>não correlacionada</strong> com <span class="math inline">\(X_1\)</span> e <span class="math inline">\(X_2\)</span>.</p></li>
+<li class="fragment"><p>Compare com (A) e comente o efeito de <span class="math inline">\(X_3\)</span> ser <strong>não correlacionada</strong> com <span class="math inline">\(X_1\)</span> e <span class="math inline">\(X_2\)</span>.</p>
+<pre><code># 1.
+  r &lt;- 0.7
+  P&lt;- matrix(c(1, r, 0,
+               r, 1, 0,
+               0, 0, 1,),
+             nrows = 3, byrow = TRUE)
+  P
+  res &lt;- eigen(P)
+
+  res$values    # autovalores  -&gt; variância de cada CP
+res$vectors   # autovetores -&gt;        coeficientes das CPs
+
+# 2.
+autovalores &lt;- res$values
+total_var   &lt;- sum(autovalores)
+prop_var    &lt;- autovalores / total_var
+
+autovalores
+prop_var</code></pre></li>
 </ol>
 </section>
 <section id="observações-importantes-sobre-a-acp-i" class="slide level2">
@@ -325,12 +344,12 @@ P=\begin{bmatrix}1 &amp; r &amp; 0\\ r &amp; 1 &amp; 0\\ 0 &amp; 0 &amp; 1\end{b
 <ol start="22" type="A">
 <li class="fragment">Em R, ACP com <code>prcomp</code>:</li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="co"># Se pretende CPs da matriz de correlações (recomendado com escalas distintas):</span></span>
-<span id="cb3-2"><a href=""></a>pc <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(X, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb3-3"><a href=""></a><span class="co"># CPs da matriz de covariâncias (todas as variáveis na mesma escala/unidade):</span></span>
-<span id="cb3-4"><a href=""></a>pc_cov <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(X, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb3-5"><a href=""></a><span class="fu">summary</span>(pc)     <span class="co"># variâncias (valores próprios), PVE, PVE acumulada</span></span>
-<span id="cb3-6"><a href=""></a><span class="fu">biplot</span>(pc)      <span class="co"># biplot (scores e loadings)</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="co"># Se pretende CPs da matriz de correlações (recomendado com escalas distintas):</span></span>
+<span id="cb4-2"><a href=""></a>pc <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(X, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-3"><a href=""></a><span class="co"># CPs da matriz de covariâncias (todas as variáveis na mesma escala/unidade):</span></span>
+<span id="cb4-4"><a href=""></a>pc_cov <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(X, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-5"><a href=""></a><span class="fu">summary</span>(pc)     <span class="co"># variâncias (valores próprios), PVE, PVE acumulada</span></span>
+<span id="cb4-6"><a href=""></a><span class="fu">biplot</span>(pc)      <span class="co"># biplot (scores e loadings)</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="6" type="I">
 <li class="fragment">Quantas CPs reter?</li>
 </ol>

@@ -106,6 +106,28 @@ $$ 1. Determine as **três CPs**.
 
 3.  Compare com (A) e comente o efeito de $X_3$ ser **não correlacionada** com $X_1$ e $X_2$.
 
+    ```         
+    # 1.
+      r <- 0.7
+      P<- matrix(c(1, r, 0,
+                   r, 1, 0,
+                   0, 0, 1,),
+                 nrows = 3, byrow = TRUE)
+      P
+      res <- eigen(P)
+
+      res$values    # autovalores  -> variância de cada CP
+    res$vectors   # autovetores ->        coeficientes das CPs
+
+    # 2.
+    autovalores <- res$values
+    total_var   <- sum(autovalores)
+    prop_var    <- autovalores / total_var
+
+    autovalores
+    prop_var
+    ```
+
 ------------------------------------------------------------------------
 
 ## 4. Observações importantes sobre a ACP (I)
