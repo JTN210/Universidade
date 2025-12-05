@@ -188,3 +188,6 @@ spec_opt
 #O threshold de 0.5 é inadequado para problemas de risco de crédito.
 #O threshold ótimo (0.032) maximiza Youden, aumenta drasticamente a sensibilidade e reduz falsos negativos, tornando o modelo mais útil na prática.
 
+# ===============================FOLHA8-2=============================================================
+
+#Exercicio 1 
