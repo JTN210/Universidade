@@ -80,21 +80,7 @@ execute:
 P=\begin{bmatrix}1 & r\\ r & 1\end{bmatrix},\quad r=\rho(X_1,X_2)\ne0.
 $$ 1. Determine as **duas CPs** (valores próprios/vetores próprios de $P$).
 
-```         
-r <- 0.7
-
-P <- matrix(c(1, r, r, 1), nrow = 2, byrow = TRUE)
-
-res <- eigen(P)
-res$values   
-res$vectors 
-```
-
 2.  Discuta, em função de $r$, a **importância** relativa das CPs.
-
-    ```         
-    Simplificar os dados
-    ```
 
 ------------------------------------------------------------------------
 
@@ -105,28 +91,6 @@ $$ 1. Determine as **três CPs**.
 2.  Discuta a importância em função de $r$.
 
 3.  Compare com (A) e comente o efeito de $X_3$ ser **não correlacionada** com $X_1$ e $X_2$.
-
-    ```         
-    # 1.
-      r <- 0.7
-      P<- matrix(c(1, r, 0,
-                   r, 1, 0,
-                   0, 0, 1,),
-                 nrows = 3, byrow = TRUE)
-      P
-      res <- eigen(P)
-
-      res$values    # autovalores  -> variância de cada CP
-    res$vectors   # autovetores ->        coeficientes das CPs
-
-    # 2.
-    autovalores <- res$values
-    total_var   <- sum(autovalores)
-    prop_var    <- autovalores / total_var
-
-    autovalores
-    prop_var
-    ```
 
 ------------------------------------------------------------------------
 
@@ -172,7 +136,13 @@ Considere *iris* sem a coluna `Species`.
 2)  Verifique que:
 
 -   Valores próprios de $S$ = **variâncias** das CPs;\
--   Coeficientes das CPs coincidem (a menos de sinal) com os **vetores próprios** de $S$;\
+
+-   
+
+    ```         
+    Coeficientes das CPs coincidem (a menos de sinal) com os **vetores próprios** de $S$;\
+    ```
+
 -   **Traço** de $S$ = soma dos valores próprios = soma das variâncias das CPs.
 
 ------------------------------------------------------------------------
