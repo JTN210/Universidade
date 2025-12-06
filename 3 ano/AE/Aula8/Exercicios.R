@@ -189,14 +189,116 @@ spec_opt
 #O threshold ótimo (0.032) maximiza Youden, aumenta drasticamente a sensibilidade e reduz falsos negativos, tornando o modelo mais útil na prática.
 
 # ===============================FOLHA8-2=============================================================
-
+ library(ggplot2)
 #Exercicio 1 
 
-  
+dados <- saude_fumadores
+
+head(dados)
+str(dados)
+summary(dados)
+
+# 2 
+dados$fumador <- factor(dados$fumador, levels = c(0,1),
+                        labels = c("Não Fumador", "Fumador"))
+
+dados$doenca <- factor(dados$doenca, levels = c(0,1),
+                       labels = c("Sem doença", "Com doença"))
+
+tabela <- table(dados$doenca,dados$fumador)
+tabela
+
+ggplot(data = dados, aes(x = fumador, fill = doenca)) +
+  geom_bar(position = "dodge") + 
+  labs(x = "Fumador atual", y = "Numero de individuos", fill = "Doenca respiratoria")
+
+
+ggplot(data = dados, aes(x = doenca, y = idade)) + 
+  geom_boxplot()
+
+
+# 3 
+
+modelo1 <- glm(doenca ~ fumador, data = dados, family = binomial)
+
+summary(modelo1)
+
+# O sinal do coeficiento do fumador é + o que significa que 
+# Os fumadores têm maior probabilidade de ter a doença
+
+# O p-valor = 0.026 é < 0.05 o que indica que existe evidencia
+# Estatistica que o fumador esta associado a presenca da doenca 
+
+odds_ratio <- exp(0.8848)
+odds_ratio
+
+#As odds (probabilidade relativa) de ter doença respiratória crónica 
+#São 2.42 vezes maiores para fumadores do que para não fumadores.
+
+# 6 
+
+modelo2 <- glm(doenca ~ fumador + idade, data = dados, family = binomial)
+
+summary(modelo2)
+#O coeficiente de fumador aumentou ligeiramente ao incluir a idade, mas não mudou de forma drástica.
+# O efeito estimado de ser fumador continua semelhante ao modelo simples.
+
+
+#No modelo múltiplo, o coeficiente de fumador representa o “efeito de ser fumador ajustado à idade”,
+#Ou seja, a diferença no risco de doença entre fumadores e não fumadores com a mesma idade.
+#Assim, o modelo separa o efeito do tabagismo do efeito da idade.
+
+
+# 8
+
+novos <- data.frame(
+  fumador = factor(c("Não Fumador", "Fumador", "Não Fumador", "Fumador"),
+                   levels = levels(dados$fumador)),
+  idade   = c(30, 30, 60, 60)
+)
+novos
+
+prob <- predict(modelo2, newdata = novos, type = "response")
+prob
+#A probabilidade de doença aumenta tanto com a idade como com o tabagismo.
+#Para pessoas jovens (30 anos), o risco é muito baixo, mas ainda assim cerca do dobro nos fumadores.
+#Para pessoas mais velhas (60 anos), o risco aumenta bastante e mais que duplica novamente entre fumadores.
+#Assim, idade e tabagismo têm efeitos cumulativos no aumento da probabilidade de doença.
+
+
+# 9 
+
+modelo2 <- glm(doenca ~ fumador + idade, data = dados, family = binomial)
+
+prob_modelo2 <- predict(modelo2, type  = "response")
+
+head(prob_modelo2)
+
+prev_0_1 <- ifelse(prob_modelo2 >= 0.5, "Com doença", "Sem doença")
+head(prev_0_1)
+
+prev_0_1 <- factor(prev_0_1, levels = levels(dados$doenca))
+str(prev_0_1)
+
+
+# 10
+
+matriz_conf <- table(Real = dados$doenca, Previsto = prev_0_1)
+matriz_conf
+
+acerto_global <- mean(prev_0_1 == dados$doenca)
+acerto_global
+
+# Ele não está a identificar nenhum doente
+
+# 11
+
+# O modelo classificou toda a gente como "Sem doença"
+# Acertou 90,3% mas errou 100% dos doentos.
+# Isto aconteceu porque a doença é rara (29 em 300)
+# Logo isto mostra como o acerto_global é enganador 
+# Porque apesar de ele ter acertado 90,3% ele não identificou ninguem 
 
 
 
-
-
-
-    
+# Exercicio 2 
