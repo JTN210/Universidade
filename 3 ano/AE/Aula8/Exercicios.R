@@ -302,3 +302,47 @@ acerto_global
 
 
 # Exercicio 2 
+
+
+
+
+#=========================== Folha 8 -2 ======================================
+library(ggplot2)
+dados <- saude_fumadores
+
+tabela <- table(dados$doenca, dados$fumador)
+tabela
+
+ggplot(data = dados,aes(x = fumador, fill = doenca)) +
+ geom_bar(position = "dodge")
+
+ggplot(data = dados, aes(x = doenca, y = idade)) + 
+  geom_boxplot()
+
+
+# 3 
+
+modelo1 <- glm(doenca ~ fumador,data = dados, family = binomial)
+summary(modelo1)
+
+odds <- exp(0.8848)
+odds
+
+modelo2 <- glm(doenca ~ fumador + idade,data = dados, family = binomial)
+summary(modelo2)
+
+novos_perfis <- data.frame(
+  fumador = c(0, 1, 0, 1),          # A, B, C, D
+  idade   = c(30, 30, 60, 60)
+)
+
+novos_perfis
+
+prob_perfis <- predict(modelo2, newdata = novos_perfis, type = "response")
+prob_perfis
+
+
+prob01 <- predict(modelo2, type = "response")
+
+prev_xx_0_1 <- ifelse(prob01 >= 0.5,"Com Doença", "Sem Doença")
+View(prev_xx_0_1)
