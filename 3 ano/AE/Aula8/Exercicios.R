@@ -344,5 +344,13 @@ prob_perfis
 
 prob01 <- predict(modelo2, type = "response")
 
-prev_xx_0_1 <- ifelse(prob01 >= 0.5,"Com Doença", "Sem Doença")
-View(prev_xx_0_1)
+prev_01 = ifelse(prob01 >= 0.5, 1, 0)
+head(prev_01)
+
+
+
+matriz_conf <- table(Real = dados$doenca, Previsto = prev_01)
+matriz_conf
+
+acerto_global <- mean(prev_01 == dados$doenca)
+acerto_global
