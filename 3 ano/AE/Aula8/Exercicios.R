@@ -302,55 +302,58 @@ acerto_global
 
 
 # Exercicio 2 
-
-
-
-
-#=========================== Folha 8 -2 ======================================
 library(ggplot2)
-dados <- saude_fumadores
+dados_alunos <- alunos_aprovacao
 
-tabela <- table(dados$doenca, dados$fumador)
+tabela <- table(Aprovado = dados_alunos$aprovado,Trabalhador = dados_alunos$trabalhador )
 tabela
 
-ggplot(data = dados,aes(x = fumador, fill = doenca)) +
- geom_bar(position = "dodge")
+summary(dados_alunos)
 
-ggplot(data = dados, aes(x = doenca, y = idade)) + 
+ggplot(data = dados_alunos, aes(x = factor(aprovado), y = horas_estudo, fill = aprovado)) + 
+         geom_boxplot()
+ggplot(dados_alunos, aes(x = factor(aprovado), y = frequencia_aulas, fill = aprovado)) +
+  geom_boxplot()
+ggplot(dados_alunos, aes(x = factor(aprovado), y = media_secundario, fill = aprovado)) +
   geom_boxplot()
 
+modelo1_alunos <- glm(aprovado ~ horas_estudo + frequencia_aulas + trabalhador,data = dados_alunos, family = binomial)
+summary(modelo1_alunos)
 
-# 3 
+# o sinal é positivo mostrando que é importante para ser aprovado 
+# o sinal negativo mostra que se o aluno é trabalhador tem menos probabilidade de ser aprovado
+# quanto menor o p valor mais significancia a variavel vai ter para ser aprovado 
 
-modelo1 <- glm(doenca ~ fumador,data = dados, family = binomial)
-summary(modelo1)
+exp(-0.25916)
+# Mostra nos que a odd de um trabalhador ser aprovado é 0.7717 inferior a odds de ser aprovado de um NÃO Trabalhador
 
-odds <- exp(0.8848)
-odds
-
-modelo2 <- glm(doenca ~ fumador + idade,data = dados, family = binomial)
-summary(modelo2)
-
-novos_perfis <- data.frame(
-  fumador = c(0, 1, 0, 1),          # A, B, C, D
-  idade   = c(30, 30, 60, 60)
-)
-
-novos_perfis
-
-prob_perfis <- predict(modelo2, newdata = novos_perfis, type = "response")
-prob_perfis
+modelo2_alunos <- glm(aprovado ~ horas_estudo + frequencia_aulas + trabalhador + media_secundario, data = dados_alunos, family = binomial)
+summary(modelo2_alunos)
+# Sim alterou todas
+# O AIC baixou logo a qualidade do modelo aumentou
+# b ja saiu no outro teste 
 
 
-prob01 <- predict(modelo2, type = "response")
+novos_perfis <- data.frame(horas_estudo = c(2,8,5),
+                            frequencia_aulas = c(60,90,80),
+                            trabalhador = c(1,0,0), 
+                            media_secundario = c(12,12,17))
+probabilidade <- predict(modelo2_alunos, newdata = novos_perfis, type = "response")
+probabilidade
+# Para uma media fixa podemos concluir que as horas de estudo e a frequencia nas aulas tem um impacto positivo nas Prob de aprovação
+# Pela media do secundario conseguimos ver que a media tem um grande peso
 
-prev_01 = ifelse(prob01 >= 0.5, 1, 0)
-head(prev_01)
+prev = predict(modelo2_alunos, type = "response")
+prev_1 <- ifelse(prev >= 0.5, "Aprovado", "Reprovado")
+prev
+matrix <- table(Real = dados_alunos$aprovado, Previsto = prev_1)
+matrix
+# 169 + 0 /200 
+169/200
+# É satisfatorio pois temos um taxa de acerto de 84.5% 
+# Esta errar nos aprovados
+# as implicações é que está a chumbar pessoas que passaram
+
+# C não sai porque não demos o criterio
 
 
-
-matriz_conf <- table(Real = dados$doenca, Previsto = prev_01)
-matriz_conf
-
-acerto_global <- mean(prev_01 == dados$doenca)
-acerto_global

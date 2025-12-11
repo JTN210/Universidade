@@ -155,3 +155,6 @@ dados <- data.frame(
 dados
 ggplot(data = dados, aes(x = grupos , y = redução)) + 
   geom_boxplot()
+
+
+

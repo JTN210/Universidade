@@ -69,7 +69,7 @@ plot(scores[, 1], scores[, 2],
      ylab = "CP2",
      main = "CP1 vs CP2 (NCI60)")
 
-legend("topright",
+legend("bottom",
        legend = levels(labs_factor),
        col = 1:length(levels(labs_factor)),
        pch = 19,
