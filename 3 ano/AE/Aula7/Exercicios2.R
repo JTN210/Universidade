@@ -39,7 +39,8 @@ ord1 <- order(abs(loading[,1]), decreasing = TRUE)[1:25]
 ord2 <- order(abs(loading[,2]), decreasing = TRUE)[1:25]
 ord1
 ord2
-
+sobreposicao = length(intersect(ord1, ord2))
+sobreposicao
 
 # Exercicio2
 library(mlbench)
@@ -98,5 +99,6 @@ plot(PVE_ACUMULADO,type = "b",
      xlab = "Componente Principal",
      ylab = " PVE_Acumulado",
      main = "SCREE PLOT")
+
 
 

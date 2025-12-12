@@ -213,7 +213,7 @@ ggplot(data = dados, aes(x = fumador, fill = doenca)) +
   labs(x = "Fumador atual", y = "Numero de individuos", fill = "Doenca respiratoria")
 
 
-ggplot(data = dados, aes(x = doenca, y = idade)) + 
+ggplot(data = dados, aes(x = factor(doenca), y = idade)) + 
   geom_boxplot()
 
 

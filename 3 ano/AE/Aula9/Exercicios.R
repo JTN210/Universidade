@@ -84,7 +84,7 @@ confint(modelo, level = 0.95)
 
 dados <- c(6.5, 7.0, 5.8, 8.2, 6.9, 7.5, 5.2, 6.1, 7.8, 6.3, 5.9, 7.1)
 dados
-length(dados)
+length(dados) 
 mean(dados)
 
 var(dados)

@@ -11,7 +11,8 @@ dados_titanic$Sex <- factor(dados_titanic$Sex, levels = c("male", "female"))
 split <- initial_split(dados_titanic, 0.8)
 treino_titanic <- training(split)
 teste_titanic <- testing(split)
-
+#dados de treino para ajustar
+#dados de teste para avaliar
 modelo_titanic <- glm(Survived ~ Pclass + Sex + Age + Fare,data = treino_titanic,
                       family = binomial)
 summary(modelo_titanic)
@@ -49,8 +50,10 @@ table(dados_default$Y)
 split <- initial_split(dados_default, 0.6)
 dados_default_teste <- testing(split)
 dados_default_treino <- training(split)
-dados_default_teste
-dados_default_treino
+prop_treino <- mean(dados_default_treino$Y)
+prop_teste  <- mean(dados_default_teste$Y)
+prop_treino
+prop_teste
 
 modelo_default <- glm( Y ~ balance + income + student,  family = binomial, data = dados_default_treino)
 
@@ -81,3 +84,6 @@ accuracy <- (TP + TN)/ sum(tabela_default)
 
 roc_obj <- roc(dados_default_teste$Y, prob_teste)
 auc(roc_obj)
+
+
+
