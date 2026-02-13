@@ -27,7 +27,7 @@ public class ex1 {
         int tamanho = fim - inicio + 1; 
         int[] resultado = new int[tamanho];
         int j = 0;
-        for( int i = inicio; i < fim + 1; i++)
+            for( int i = inicio; i < fim + 1; i++)
             {
                 resultado[j] = numeros[i];
                 j++;

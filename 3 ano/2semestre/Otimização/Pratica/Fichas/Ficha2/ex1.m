@@ -1,24 +1,13 @@
-% 1. Definir o domínio (conforme o slide, de -6 a 6)
-[w1, w2] = meshgrid(-6:0.1:6, -6:0.1:6);
+[w1,w2]=meshgrid(-5:0.01:5,-5:0.1:5);
 
-% 2. Definir a função
-F = w1.^3+2.*w1.*w2.^2-w2.^3-20.*w1;
+f=w1.^3+2*w1.*w2.^2-w2.^3-20*w1;
 
-% --- Gráfico 1: Curvas de Nível (Contour) ---
-figure; hold on; box on; 
-contour(w1, w2, F, 100, 'LineWidth',1.2); % Usamos 40 linhas para dar detalhe
-colorbar;
-xlabel('w_1');
-ylabel('w_2');
-title('Curvas de nível');
-grid on;
+figure;hold on; box on;
 
-% --- Gráfico 2: Superfície 3D (fsurf ou mesh) ---
-figure;
-surf(w1, w2, F);
-shading interp; % Suaviza as cores como no slide
-colorbar;
-xlabel('w_1');
-ylabel('w_2');
-zlabel('F(w_1,w_2)');
-title('Função F(w_1,w_2)');
+contour(w1,w2,f,100,'LineWidth',1.2);
+
+plot([-5 5],[0 0],'k--','LineWidth',1);%eixo x
+plot([0 0],[-5 5],'k--','LineWidth',1);%eixo y  
+
+plot(2.580,0,'ko','MarkerFaceColor','k','MarkerSize',5);
+plot(-2.580,0,'ko','MarkerFaceColor','k','MarkerSize',5);
