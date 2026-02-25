@@ -1,0 +1,63 @@
+clc; clear; close all;
+%Função:  f = w1.^3 + 2*w1.*(w2.^2) - w2.^3 - 20*w1;
+% Criar grelha
+[w1, w2] = meshgrid(-5:0.8:5, -5:0.8:5);
+
+% Gradiente
+df_dw1 = 3*w1.^2 + 2*w2.^2 - 20;
+df_dw2 = 4*w1.*w2 - 3*w2.^2;
+
+% Normalizar o gradiente (mesmo tamanho)
+norma = sqrt(df_dw1.^2 + df_dw2.^2);
+
+U = df_dw1 ./ norma;
+V = df_dw2 ./ norma;
+
+% Plot do campo vetorial
+figure;
+%nota: 0.3 controla o tamanho das setas
+quiver(w1, w2, U, V, 0.5, 'k', 'LineWidth', 1.0);
+xlabel('w_1');
+ylabel('w_2');
+title('Campo vetorial do gradiente de f(w_1,w_2)');
+axis equal;
+grid on;
+hold on;
+[w1, w2] = meshgrid(-5:0.1:5, -5:0.1:5);
+
+f = w1.^3 + 2*w1.*(w2.^2) - w2.^3 - 20*w1;
+contour(w1, w2, f, 100);
+%%soluções
+plot(2.580, 0, 'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 5);
+% Rótulo w* mínimo
+text(2.3, -0.2, 'w* mínimo', 'Interpreter', 'latex', 'FontSize', 8, 'Color', 'r');
+%%
+plot(-2.580, 0, 'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 5);
+% Rótulo w* máximo
+text(-2.5, -0.3, 'w* máximo', 'Interpreter', 'latex', 'FontSize', 8, 'Color', 'r');
+%%
+plot(1.8, 2.5, 'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 5);
+% Rótulo w* sela
+text(1.2, 2, 'w* sela', 'Interpreter', 'latex', 'FontSize', 8, 'Color', 'r');
+%%
+plot(-1.8, -2.2, 'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 5);
+% Rótulo w* sela
+text(-1.6, -2.4, 'w* sela', 'Interpreter', 'latex', 'FontSize', 8, 'Color', 'r');
+%%
+
+hold on
+colorbar;
+shading interp;
+hold off;
+
+% Plot da superfície
+figure;
+surfc(w1, w2, f);
+colorbar
+% Melhorias visuais
+xlabel('w1');
+ylabel('w2');
+zlabel('F(w1,w2)');
+title('Função F(w1,w2)');
+shading interp;
+hold off

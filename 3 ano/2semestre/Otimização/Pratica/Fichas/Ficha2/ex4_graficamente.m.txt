@@ -1,0 +1,84 @@
+clc; clear; close all;
+
+% Domínio
+[w1, w2] = meshgrid(0:0.01:1, 0:0.01:1);
+
+% Função escalar
+f=w1.^3+2*w1.*w2.^2-w2.^3-20*w1;
+
+
+%%%%%%%%%%%%%%%%%%
+% Figura 
+figure; hold on; box on;
+
+% Definir restrições
+c1 = (w1.^2 + w2.^2 - 1); %<=0  => w2<=1-w1.^2
+c2 = (w1 - 3*w2 + 0.5);  %>=0   => w2<=(0.5+w1)/3
+%c3 = (w1 >= 0); 
+%c4 = (w2 >= 0);
+
+
+%% Região admissível (sombreada)
+x_fill = linspace(0, 0.89, 400);
+w2_reta = (0.5 + x_fill)/3;    % curva superior a reta
+
+
+% sombrear desde 0 até pto interseção reta com circulo
+ybottom=zeros(1,400);  %curva inferior a reta w2=0
+ytop=w2_reta;
+fill([x_fill fliplr(x_fill)], [ytop fliplr(ybottom)], [0.8 0.9 1], ...
+     'FaceAlpha', 0.5, 'EdgeColor', 'none');
+
+hold on;
+x_fill = linspace(0.89, 1, 400);
+w_circ = (1-x_fill.^2).^0.5;  % circunferência
+% sombrear desde o pto interseção reta com circulo até 1
+ybottom=zeros(1,400);   %curva inferior a reta w2=0
+ytop=w_circ;            %curva superior a circunferência
+fill([x_fill fliplr(x_fill)], [ytop fliplr(ybottom)], [0.8 0.9 1], ...
+     'FaceAlpha', 0.5, 'EdgeColor', 'none');
+
+hold on;
+%% Curvas de nível (contornos)
+%contour(w1, w2, f, 20, 'LineWidth', 1.2,'LineColor', 'k');
+%hold on;
+%% Desenhar fronteiras
+
+w1= linspace(0,1,400);
+w2= (0.5 + w1)/3;    % reta
+plot(w1, w2, 'k', 'LineWidth', 2) % reta
+
+
+w2= (1-w1.^2).^0.5;  %circulo
+plot(w1, w2, 'r', 'LineWidth', 2)
+
+%% Formatação
+xlabel('$w_1$', 'Interpreter','latex','FontSize',12)
+ylabel('$w_2$', 'Interpreter','latex','FontSize',12)
+title('Região Admissível')
+axis equal
+xlim([0 1])
+ylim([0 1])
+grid on
+
+hold off
+
+%% desenhar o gráfico de f só de 0<=w1,w2<=1
+% Domínio
+[w1, w2] = meshgrid(0:0.01:1, 0:0.01:1);  %fazer com 0-2 para ver melhor
+
+% Função escalar
+f=w1.^3+2*w1.*w2.^2-w2.^3-20*w1;
+figure;
+% Plot da superfície
+surf(w1, w2, f);
+
+% Melhorias visuais
+xlabel('w1');
+ylabel('w2');
+zlabel('F(w1,w2)');
+title('Função F(w1,w2)');
+colorbar;
+shading interp;
+
+%%%%%%%%%%%%%

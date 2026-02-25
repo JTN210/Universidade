@@ -1,0 +1,32 @@
+clear all;
+clc;
+
+% options = optimset('fminunc');
+  options = optimoptions('fmincon');
+ % options = optimoptions('fmincon','Algorithm','interior-point');
+  options.Display = 'iter'; % Display optimization progress
+
+% Função objetivo
+fun = @(w) w(1)^3 + 2*w(1)*w(2)^2 - w(2)^3 - 20*w(1);
+
+% Restrição linear: w1 - 3w2 + 1/2 >= 0
+% fmincon usa A*x <= b
+% -(w1 - 3w2 + 1/2) <= 0
+A = [-1 3];
+b = 1/2;
+
+% Limites inferiores (w1 >= 0, w2 >= 0)
+lb = [0 0];
+ub = [];  % sem limites superiores explícitos
+
+% Ponto inicial
+x0 = [10 10];
+
+% Resolver
+[w_opt,fopt] = fmincon(fun,x0,A,b,[],[],lb,ub,@nonlcon,options)
+
+% Função de restrição não linear
+function [c,ceq] = nonlcon(w)
+    c = w(1)^2 + w(2)^2 - 1;  % <= 0
+    ceq = [];
+end
