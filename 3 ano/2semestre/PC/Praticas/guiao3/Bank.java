@@ -6,13 +6,20 @@ class Bank {
     private static class Account {
         private int balance;
         Lock l = new ReentrantLock();
-        Account(int balance) { this.balance = balance; }
+
+        Account(int balance) {
+            this.balance = balance;
+        }
+
         int balance() {
-             return balance; }
+            return balance;
+        }
+
         boolean deposit(int value) {
             balance += value;
             return true;
         }
+
         boolean withdraw(int value) {
             if (value > balance)
                 return false;
@@ -29,15 +36,12 @@ class Bank {
     public int createAccount(int balance) {
         Account c = new Account(balance);
         l.lock();
-        try
-        {
+        try {
             int id = nextId;
             nextId += 1;
             map.put(id, c);
             return id;
-        }
-        finally
-        {
+        } finally {
             l.unlock();
         }
     }
@@ -46,23 +50,17 @@ class Bank {
     public int closeAccount(int id) {
         Account c;
         l.lock();
-        try
-        {
+        try {
             c = map.remove(id);
             if (c == null)
                 return 0;
             c.l.lock();
-            try
-            {
-            return c.balance();
-            }
-            finally
-            {
+            try {
+                return c.balance();
+            } finally {
                 c.l.unlock();
             }
-        }
-        finally
-        {
+        } finally {
             l.unlock();
         }
     }
@@ -71,48 +69,36 @@ class Bank {
     public int balance(int id) {
         Account c;
         l.lock();
-        try
-        {
+        try {
             c = map.get(id);
             if (c == null)
                 return 0;
             c.l.lock();
-            try
-            {
-            return c.balance();
-            }
-            finally
-            {
+            try {
+                return c.balance();
+            } finally {
                 c.l.unlock();
             }
-        }
-        finally
-        {
+        } finally {
             l.unlock();
-        }  
+        }
     }
 
     // deposit; fails if no such account
     public boolean deposit(int id, int value) {
         Account c;
         l.lock();
-        try
-        {
+        try {
             c = map.get(id);
             if (c == null)
                 return false;
             c.l.lock();
-            try
-            {
+            try {
                 return c.deposit(value);
-            }
-            finally
-            {
+            } finally {
                 c.l.unlock();
             }
-        }
-        finally
-        {
+        } finally {
             l.unlock();
         }
     }
@@ -121,84 +107,89 @@ class Bank {
     public boolean withdraw(int id, int value) {
         Account c;
         l.lock();
-        try
-        {
+        try {
             c = map.get(id);
             if (c == null)
                 return false;
             c.l.lock();
-            try
-            {
+            try {
                 return c.withdraw(value);
-            }
-            finally
-            {
+            } finally {
                 c.l.unlock();
             }
-        }
-        finally
-        {
+        } finally {
             l.unlock();
-        }    
+        }
     }
 
     // transfer value between accounts;
     // fails if either account does not exist or insufficient balance
     public boolean transfer(int from, int to, int value) {
-    Account cfrom, cto;
-    l.lock();
-    try 
-    {
-        cfrom = map.get(from);
-        cto = map.get(to);
-        if (cfrom == null || cto == null) return false;
-        if (from < to) 
-        {
-            cfrom.l.lock();
-            cto.l.lock();
+        Account cfrom, cto;
+        l.lock();
+        try {
+            cfrom = map.get(from);
+            cto = map.get(to);
+            if (cfrom == null || cto == null)
+                return false;
+            if (from < to) {
+                cfrom.l.lock();
+                cto.l.lock();
+            } else {
+                cto.l.lock();
+                cfrom.l.lock();
+            }
+        } finally {
+            l.unlock();
         }
-        else
-        {
-            cto.l.lock();
-            cfrom.l.lock();
-        }
-    } 
-    finally 
-    {
-        l.unlock();
-    }
-        
-        try 
-        {
-            try
-            {
-                if (!cfrom.withdraw(value))
-                {
+
+        try {
+            try {
+                if (!cfrom.withdraw(value)) {
                     return false;
                 }
-            }
-            finally
-            {
+            } finally {
                 cfrom.l.unlock();
             }
-                return cto.deposit(value);
-        } 
-        finally 
-        {
+            return cto.deposit(value);
+        } finally {
             cto.l.unlock();
         }
-}
+    }
+
     // sum of balances in set of accounts; 0 if some does not exist
     public int totalBalance(int[] ids) {
-        Account c;
         int total = 0;
-        for (int i : ids) {
-            c = map.get(i);
-            if (c == null)
-                return 0;
+        Account[] cs = new Account[ids.length];
+        Arrays.sort(ids);
+        this.l.lock();
+        try {
+            for (int i = 0; i < ids.length; i++) {
+                Account c = map.get(ids[i]);
+                cs[i] = c;
+                if (c == null)
+                    return 0;
+            }
+            for (Account c : cs)
+                c.l.lock();
+        } finally {
+            this.l.unlock();
+        }
+        for (Account c : cs) {
             total += c.balance();
+            c.l.unlock();
         }
         return total;
+        // try{
+        // for(Account c : cs)
+        // total += c.balance();
+        // return total;
+        // } finally{
+        // for(Account c:cs)
+        // c.l.unlock();
+        // }
+        // return total;
+        // total += c.balance();
     }
 
 }
