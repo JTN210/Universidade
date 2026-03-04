@@ -1,0 +1,24 @@
+syms w1 w2
+F = 0.1*w1^6-1.5*w1^5+5*w1^2+0.1*w2^4+3*w2^2-9*w2+0.5*w1*w2;
+wk = [-1.125,1.25];
+sk = [4,0.75];
+etaO = 1.2;
+rho = 0.7;
+c = 0.0001;
+%% Calcular gradiente
+gradF = gradient(F,[w1,w2]);
+
+%% Calcular no ponot F e gradF
+FK = subs(F,[w1,w2],wk);
+gradFK = subs(gradF,[w1,w2],wk);
+%% Armijo com backtracking
+eta = etaO;
+
+while(subs(F,[w1,w2],wk+eta*sk)>FK + c * eta *gradFK *sk)
+    eta = rho * eta; 
+end
+
+etak = eta 
+fprintf('O eta que verifica a condição de Armijo é:\n')
+disp(etak)
+
