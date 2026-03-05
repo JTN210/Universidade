@@ -1,5 +1,4 @@
 import java.util.Random;
-
 public class BankTest2 {
 
     private static class Mover implements Runnable {
