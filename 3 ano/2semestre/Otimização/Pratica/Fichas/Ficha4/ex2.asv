@@ -24,4 +24,4 @@ end
 etak = eta
 fprintf('O eta que verifica a condição de Armijo é:\n')
 disp(etak)
-    
+

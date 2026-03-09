@@ -34,14 +34,30 @@ Hessphi = hessian(phi,[eta])
 hessphi_eta = subs(Hessphi, [eta],1/2)
 
 
-% ALINEA c) 
-
-etas = linspace(0,5,100)
-phi =(1-etas+etas.^2).^2
+%% ALINEA c) 
+clear clc;
+syms w1 w2 eta;
+F = (w1 + w2^2)^2
+%% phi(eta) = F(w1+eta*s com w=(1,0) e s = (-1,1)
+phi =(1-eta+eta^2)^2;
+%% grelha de pontos
+etas = linspace(0,5,100);
+vals_phi = (1-etas+etas.^2).^2;
+%% gráfico
 figure;
-plot(etas, phi);
-xlabel('\eta');
-ylabel('\phi(\eta)');
-title('Plot of \phi against \eta');
-grid on;
+plot(etas, vals_phi, 'r-','LineWidth',1.5);
+xlabel('\etas');
+ylabel('\phi(\etas)');
+title('Plot of \phi against \etas');
+hold on;
 
+
+
+%% grafico de F(w1,w2)
+ % criar grelha
+ [w1,w2] = meshgrid(-5:0.01:5, -5:0.01:5);
+ f =(w1+w2.^2).^2;
+ figure;
+ surfc(w1,w2,f);
+ colorbar;
+ shading("interp");
