@@ -50,7 +50,7 @@ colorbar;
 shading interp;
 hold off;
 
-% Plot da superfície
+    % Plot da superfície
 figure;
 surfc(w1, w2, f);
 colorbar
@@ -61,3 +61,4 @@ zlabel('F(w1,w2)');
 title('Função F(w1,w2)');
 shading interp;
 hold off
+    
