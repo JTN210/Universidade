@@ -21,7 +21,7 @@ figure
 plot(w,vals_F,'LineWidth',2);
 xlabel('w');
 ylabel('F');
-
+    
 hold on
 % desenhar os pontos gerados e trajetória(wk,fk);
 vals_w = output(:,2);

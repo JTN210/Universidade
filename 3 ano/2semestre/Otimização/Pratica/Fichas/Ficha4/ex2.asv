@@ -1,7 +1,7 @@
 syms w1 w2
-F = 0.1*w1^6-1.5*w1^5+5*w1^2+0.1*w2^4+3*w2^2-9*w2+0.5*w1*w2;
+F = 0.1*w1^6-1.5*w1^4+5*w1^2+0.1*w2^4+3*w2^2-9*w2+0.5*w1*w2;
 %% Ponto fornecido
-wk = [-1.125,1.25];
+wk = [-1.25,1.25];
 %% direção fornecida
 sk = [4,0.75];
 
@@ -16,12 +16,14 @@ FK = subs(F,[w1,w2],wk);
 gradFK = subs(gradF,[w1,w2],wk);
 %% Armijo com backtracking
 eta = etaO;
-
+i = 0;
 while(subs(F,[w1,w2],wk+eta*sk)>FK + c * eta *gradFK *sk)
-    eta = rho * eta; 
+    eta = rho * eta;
+    i = i+1;
 end
 
 etak = eta
 fprintf('O eta que verifica a condição de Armijo é:\n')
 disp(etak)
-
+disp(i)
+    

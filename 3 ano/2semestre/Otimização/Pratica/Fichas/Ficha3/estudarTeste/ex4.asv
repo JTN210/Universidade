@@ -1,0 +1,16 @@
+clear all;
+
+syms w1 w2;
+
+F = 8*w1^2+3*w1*w2+7*w2^2-25*w1+31*w2-29;
+
+grad = gradient(F,[w1 w2])
+hess = hessian(F,[w1 w2])
+[pontos1 pontos2] = solve(grad,[w1 w2])
+Maximizante_minimizante = subs(hess,[w1 w2],[pontos1 pontos2])
+
+determinante = det(Maximizante_minimizante)
+% como deu >= 0 é minimizante local
+% para ver se é maximo ou minimo local temos de ver se o limite para + e -
+
+

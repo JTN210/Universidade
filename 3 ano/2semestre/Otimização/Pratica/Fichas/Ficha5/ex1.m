@@ -1,7 +1,7 @@
-clear, clc, close all;
+clear all, clear classes,clc;
 %format long;
 %%
-syms w1 w2
+syms w1 w2;
 beta = 15; %1;5;15
 F = w1^2+beta*w2^2;
 grad = gradient(F,[w1,w2]);
@@ -11,6 +11,7 @@ grad = gradient(F,[w1,w2]);
 w0 = [10;1] ; % ponto inicial
 epsilon = 0.000001;
 Kmax = 200; % numero maximo de iterações
+
 %% aplicar o algoritmo Método de Descida Maxima com procura exata do eta 
 [w_opt,Fval_opt,output] = MDM_procuraExata(F,grad,w0,epsilon);
 
