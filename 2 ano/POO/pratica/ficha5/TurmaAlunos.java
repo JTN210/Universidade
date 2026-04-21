@@ -21,7 +21,7 @@ public class TurmaAlunos {
     {
         this.Turma = nome;
         this.UC = uc;
-        set(alunos)= alunos;
+        setAlunos(alunos);
     }
 
     public TurmaAlunos(TurmaAlunos umaTurma)
