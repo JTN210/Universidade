@@ -104,4 +104,26 @@ public class CarRental {
         .map((CarroEletrico c) -> (CarroEletrico)c.clone())
         .collect(Collectors.toSet());    
     }
-}
+
+
+    public Carro carroComMaisKms()
+    {
+        Carro vencedor = this.carros.get(0);
+
+        for( Carro atual : this.carros)
+        {
+            if (atual.getkms() > vencedor.getkms())
+            {
+              vencedor = atual;   
+            }
+            else if (atual.getkms() == vencedor.getkms())
+            {
+                if (atual.getCod().compareTo(vencedor.getCod()) < 0)
+                {
+                    vencedor = atual;   
+                }
+            }
+        }
+        return vencedor;
+    }
+}   
