@@ -89,12 +89,6 @@ public class Aluno {
     this.curso = curso;
   }
 
-  /**
-   * Implementação do método toString
-   * comum na maioria das classes Java.
-   * 
-   * @return uma string com a informação textual do objecto aluno
-   */
   public String toString() {
     StringBuffer sb = new StringBuffer();
 
@@ -107,13 +101,6 @@ public class Aluno {
 
   }
 
-  /**
-   * Implementação do método de igualdade entre dois Aluno
-   * Redefinição do método equals de Object.
-   * 
-   * @param umAluno aluno que é comparado com o receptor
-   * @return booleano true ou false
-   */
   public boolean equals(Object o) {
     if (this == o)
       return true;
@@ -126,12 +113,6 @@ public class Aluno {
         && this.numero.equals(umAluno.getNumero())
         && this.curso.equals(umAluno.getCurso()));
   }
-
-  /**
-   * Implementação do método de clonagem de um Aluno
-   * 
-   * @return objecto do tipo Aluno
-   */
 
   public Aluno clone() {
     return new Aluno(this);

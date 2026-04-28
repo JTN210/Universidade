@@ -1,16 +1,32 @@
-
 package ficha6;
-import java.util.List;
-import java.util.Set;
-import java.util.ArrayList;
+
 import java.util.stream.Collectors;
-import java.util.stream.Collector;
-import java.util.Iterator;
+
 import java.util.*;
 
 public class CarRental {
 
     private List<Carro> carros = new ArrayList<>();
+
+    private  static Map<String, Comparator<Carro>> criterios;
+
+    static
+    {
+        criterios = new HashMap<>();
+        criterios.put("custo", new ComparaPorcusto());
+        criterios.put("kms", new ComparaPorkms());
+    }
+
+    public CarRental()
+    {
+    }
+
+    public Iterator<Carro> ordenarCarros(String criterio)
+    {
+        return carros.stream().sorted(criterios.get(criterio))
+        .map((Carro c) -> (Carro)c.clone())
+        .iterator();
+    }
 
     public boolean existeCarro(String cod)
     {
@@ -52,6 +68,11 @@ public class CarRental {
         return carros.stream().map((Carro c) -> (Carro)c.clone()).collect(Collectors.toList());
     }   
 
+    public CarroRestrito getCarrosRestritos(String cod)
+    {
+        return getCarro(cod);
+    }
+
     public void adiciona(Set<Carro> vs)
     {
         vs.stream().map((Carro c) -> (Carro)c.clone()).forEach(c -> this.carros.add(c));
@@ -71,7 +92,7 @@ public class CarRental {
 
     public Carro obterCarroMaisEconomico()
     {
-        return carros.stream().reduce((Carro a, Carro b)->a.custoPorKm()<b.custoPorKm()?a:b).orElse(null);
+        return carros.stream().reduce((Carro a, Carro b)->a.custoPorKm()<b.custoPorKm()?a:b).map((Carro c) -> (Carro)c.clone()).orElse(null);
     }
 
     public double obterMediaCustoPorKm()
@@ -124,6 +145,30 @@ public class CarRental {
                 }
             }
         }
-        return vencedor;
+        return (Carro)vencedor.clone();
+    }
+
+    public Set<CarroEletrico> carroEletricos()
+    {
+        return carros.stream().filter((Carro c) -> c instanceof CarroEletrico).
+        map((Carro c) -> (CarroEletrico)c.clone()).collect(Collectors.toCollection(()-> new TreeSet<CarroEletrico>()));
+    }
+
+
+    public Map<Integer, List<Carro>> carrosPorAutonomia()
+    {
+        Map<Integer, List<Carro>> r = new TreeMap<>();
+
+        for( Carro c: carros)
+        {
+            List<Carro> l = r.get(c.autonomia());
+            if(l == null)
+            {
+                l = new ArrayList<>();
+                r.put(c.autonomia(), l);
+            }
+            l.add((Carro)c.clone());
+        }
+        return r;
     }
 }   
