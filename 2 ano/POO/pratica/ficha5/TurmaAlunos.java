@@ -173,15 +173,17 @@ public class TurmaAlunos {
         .sorted(Comparator.comparing(c -> c.getNome()))
         .collect(Collectors.toList());
     }
-/* 
-        INCOMPLETAAAAAAAAAAAAA
-    public Set<Aluno> alunosOrdemDescrescenteNumero()
-    {
-        Set<Aluno> alunos = new TreeSet<>();
-        alunos.addAll(this.alunos.values().stream().sorted());
 
-        return alunos;
-    }
- */
+  public Set<Aluno> alunosOrdemDescrescenteNumero() {
+    Comparator<Aluno> ordem = Comparator.comparing((Aluno c) -> c.getNumero()).reversed();
+    Set<Aluno> alunos = new TreeSet<>(ordem);
 
+    alunos.addAll(
+        this.alunos.values().stream()
+            .map((Aluno c) -> (Aluno)c.clone())
+            .sorted(ordem)
+            .collect(Collectors.toList()));
+
+    return alunos;
+}
 }   
