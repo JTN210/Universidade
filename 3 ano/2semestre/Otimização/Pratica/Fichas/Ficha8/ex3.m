@@ -1,0 +1,12 @@
+clear , clc, close all;
+
+options=optimoptions('fmincon','Display','iter','SpecifyObjectiveGradient',true);
+
+w0 = [0;0];
+
+A = [];b=[];
+Aeq=[];beq=[];
+lb=[];
+ub=[];
+
+[w_opt,f_opt,exitflag,output,lambda]=fmincon(@P1,w0,A,b,Aeq,beq,lb,ub,@nonlinearconstP1,options)
