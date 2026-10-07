@@ -1,2 +1,35 @@
+# Ficheiros pesados / Imagens de VM
 *.box
 *.sh
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# VS Code
+.vscode/
+
+# Python / Jupyter
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+*.venv/
+env/
+venv/
+
+# C / C++ (compilação)
+*.o
+*.out
+*.exe
+
+# LaTeX (ficheiros auxiliares de compilação)
+*.aux
+*.log
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
