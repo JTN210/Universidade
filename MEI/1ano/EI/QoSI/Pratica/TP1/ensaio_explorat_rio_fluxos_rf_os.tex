@@ -1,0 +1,96 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{enumitem}
+\setlist[itemize]{label=-}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\title{Análise e Discussão sobre Fluxos Órfãos na Monitorização de Redes IP}
+\author{
+  \textbf{GRUPO 6} \\[0.4cm]
+  Ivo Costa Sousa -- \texttt{pg63976} \\[0.15cm]
+  João Afonso Almeida Sousa -- \texttt{pg62405} \\[0.15cm]
+  João Carlos Teixeira Neiva -- \texttt{pg63978}
+}
+\date{Outubro de 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\textit{Este ensaio exploratório, desenvolvido no âmbito da avaliação de Qualidade de Serviço em Redes IP (QoSI), apresenta uma análise detalhada do artigo "Understanding Orphan Flows", de Kevin Sam Tharayil et al., direcionado à conferência TMA (Network Traffic Measurement and Analysis Conference). O trabalho foca-se na problemática dos fluxos de rede sem resolução DNS associada, explorando os desafios que estes representam para a visibilidade dos operadores de rede, o seu impacto direto na gestão de recursos (QoS) e as vulnerabilidades de segurança inerentes à evasão de controlos baseados em DNS.}
+\end{abstract}
+
+\section{Introdução}
+A gestão eficaz da Qualidade de Serviço (QoS) e a monitorização de segurança em redes IP modernas dependem fortemente de uma visibilidade abrangente sobre o tráfego. Tradicionalmente, os administradores de rede utilizam a correlação entre registos NetFlow (que resumem metadados de comunicação entre endereços IP) e dados do Domain Name System (DNS) para identificar e categorizar as aplicações em uso.
+
+Contudo, esta abordagem baseada em DNS possui um "ponto cego" significativo: o tráfego direcionado a endereços IP que não possuem qualquer registo DNS associado. A estes fluxos dá-se o nome de fluxos órfãos (\textit{orphan flows}). Este fenómeno pode resultar de aplicações legítimas (como sincronização de relógios ou otimizações Peer-to-Peer), utilização de serviços de anonimização (VPNs) ou atividades maliciosas programadas para evadir mecanismos de bloqueio de domínios.
+
+Este trabalho efetua o estudo e análise do artigo atual "Understanding Orphan Flows" \cite{tharayil2025}, extraindo as suas principais conclusões e discutindo o seu impacto para as temáticas de QoSI, visando preparar uma exposição crítica sobre os desafios contemporâneos da análise de tráfego.
+
+\section{Resumo do Artigo: "Understanding Orphan Flows"}
+
+A monitorização do tráfego DNS é um pilar fundamental da gestão e segurança de redes IP modernas. No entanto, este artigo demonstra a existência de um ponto cego crítico: os "Fluxos Órfãos" (\textit{Orphan Flows}), isto é, comunicações IP direcionadas a endereços que não possuem qualquer pedido DNS prévio registado. O estudo analisa mais de 3,3 mil milhões de registos NetFlow diários, isolando tráfego legítimo omitido bem como vetores de evasão de segurança e \textit{malware}.
+
+\subsection{Metodologia e Desafios Práticos}
+A identificação de fluxos órfãos a esta escala apresenta enormes desafios operacionais (típicos na área coberta pela conferência TMA), nomeadamente a perda de dados na recolha (que no estudo chegou a rondar os 62 por cento na captura de pacotes) e a dificuldade em orientar fluxos unidirecionais. 
+
+Para resolver este problema, os autores construíram um \textit{pipeline} de processamento de tráfego (ilustrado na Figura \ref{fig:1}) que filtra ruído esperado (como tráfego ICMP ou DNS interno), funde fluxos unidirecionais em bidirecionais baseando-se em portas efémeras vs. registadas para inferir a direção cliente-servidor, e cruza os dados limpos com bases de dados DNS ativas e passivas.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{2.png}
+  \caption{Pipeline de Deteção e Identificação de Fluxos Órfãos.}
+  \label{fig:1}
+\end{figure}
+
+\subsection{Principais Descobertas e Classificação}
+Do processamento restaram cerca de 26 mil endereços IP órfãos, que foram alvo de categorização rigorosa (ver Figura \ref{fig:2}):
+\begin{itemize}
+    \item \textbf{Tráfego Explicável (53,47\%):} Mais de metade dos IPs órfãos pertenciam a comportamentos de rede esperados mas evasivos ao DNS, tais como ligações VPN, sistemas de partilha Peer-to-Peer (ex: BitTorrent), atualizações otimizadas do Windows e comunicações de áudio/vídeo via Microsoft Teams.
+    \item \textbf{Tráfego Malicioso Confirmado (7,27\%):} Correspondente a IPs presentes em listas de bloqueio públicas (\textit{blocklists}) ou fortemente sinalizados por fornecedores de antivírus.
+    \item \textbf{Potencialmente Malicioso (2,53\%):} Endereços que escapam às atuais listas de bloqueio, mas com os quais ficheiros de \textit{malware} conhecidos tentaram ativamente comunicar de forma direta por IP.
+    \item \textbf{Comportamento Indeterminado (36,73\%):} Destaca a dificuldade intrínseca da medição de redes reais (\textit{wild west} da internet), onde uma porção significativa de tráfego permanece incompreensível apenas por metadados de fluxos.
+\end{itemize}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{1.png}
+  \caption{Distribuição do Tráfego Órfão Identificado.}
+  \label{fig:2}
+\end{figure}
+
+O estudo revelou ainda que a esmagadora maioria destes fluxos, em especial os maliciosos, são altamente transientes, operando ativamente em curtos espaços de tempo e alternando de IP para dificultar a sua deteção.
+
+\section{Discussão e Implicações para QoSI}
+
+A introdução do conceito de fluxos órfãos traz implicações diretas e profundas para as matérias discutidas na unidade curricular de QoSI, estruturando-se em três grandes eixos de discussão para apresentação em aula:
+
+\begin{description}
+    \item[1. Impacto na Atribuição de QoS e Gestão de Recursos:] A incapacidade de rotular uma fração do tráfego impede a aplicação de políticas granulares de QoS. Por exemplo, grandes transferências de dados via BitTorrent ou atualizações Peer-to-Peer do Windows (que geram elevado tráfego órfão) podem congestionar a rede e degradar serviços de tempo real. Sem a identificação DNS, é difícil para os \textit{shapers} de tráfego discernir entre um descarregamento secundário e um serviço crucial em IP direto.
+    
+    \item[2. O Dilema do "Default Deny" em Redes Fechadas:] Uma reação intuitiva de segurança perante fluxos não identificados seria o seu bloqueio por defeito (\textit{default deny}). Contudo, a discussão do artigo prova que esta ação causaria quebras de disponibilidade inaceitáveis, uma vez que serviços base como videochamadas, atualizações do sistema operativo e sincronização NTP (\textit{Network Time Protocol}) dependem destas conexões "órfãs". O equilíbrio entre segurança restritiva e usabilidade da rede é um desafio central.
+    
+    \item[3. A Evasão das Defesas Baseadas em DNS:] Grande parte da filtragem e mitigação de anomalias contemporânea é feita ao nível do DNS (como \textit{firewalls} de próxima geração a bloquear domínios de \textit{botnets}). A constatação de que várias famílias de \textit{malware} comunicam exclusivamente por IP direto demonstra uma falha na infraestrutura de medição tradicional. Para garantir uma rede fiável e segura, as métricas de desempenho e análise (como defendido pela filosofia da conferência TMA) devem ser combinadas com inteligência de ameaças dinâmica e sistemas baseados em assinaturas de pacotes em vez de confiarem cegamente no DNS.
+\end{description}
+
+\section{Conclusão}
+
+O estudo demonstra inequivocamente que a monitorização exclusiva baseada em DNS deixa lacunas graves de visibilidade. Para manter a Qualidade de Serviço e a Segurança em Redes IP, destacam-se três recomendações fundamentais: 
+
+\begin{description}
+    \item[1. Integração de NetFlow + DNS:] Os sistemas de monitorização de rede devem integrar ativamente registos de tráfego IP com respostas DNS em tempo real para assinalar desvios instantaneamente. 
+    \item[2. Deteção de Ameaças Transientes:] Dado que 9,8\% dos IPs órfãos estão associados a atividades maliciosas e têm uma vida média curta (efémera), a inspeção de fluxos órfãos serve como um excelente indicador precoce de infeção (IoC). 
+    \item[3. Políticas de QoS e Otimização:] A identificação de tráfego denso (como atualizações P2P do Windows) permite aplicar políticas adequadas de modelação de tráfego (\textit{Traffic Shaping}) sem afetar aplicações críticas.
+\end{description}
+
+\begin{thebibliography}{9}
+\bibitem{tharayil2025}
+Tharayil, K.S., Avgetidis, A., Ma, Z., Antonakakis, M., Keromytis, A.D.:
+\textit{Understanding Orphan Flows}. In: Network Traffic Measurement and Analysis Conference (TMA), 2025.
+\end{thebibliography}
+
+\end{document}
