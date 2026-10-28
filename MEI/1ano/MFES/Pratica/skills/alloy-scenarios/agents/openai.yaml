@@ -1,0 +1,4 @@
+interface:
+  display_name: "Alloy Scenarios"
+  short_description: "Generate Alloy scenarios from requirements"
+  default_prompt: "Use $alloy-scenarios with my Alloy declarations, natural language requirement, and requested positive and negative scenario counts."

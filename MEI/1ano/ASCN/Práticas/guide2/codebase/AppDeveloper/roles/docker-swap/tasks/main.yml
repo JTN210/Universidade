@@ -1,0 +1,40 @@
+---
+- name: Create destination directory for Swap Dockerfile on node1
+  ansible.builtin.file:
+    path: /home/vagrant/swap_build
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: '0755'
+
+- name: Copy Dockerfile to node1
+  ansible.builtin.copy:
+    src: Dockerfile
+    dest: /home/vagrant/swap_build/Dockerfile
+    owner: vagrant
+    group: vagrant
+    mode: '0644'
+
+- name: Build Swap Docker image
+  community.docker.docker_image:
+    name: swap-app
+    build:
+      path: /home/vagrant/swap_build
+    source: build
+    state: present
+
+- name: Run Swap container
+  community.docker.docker_container:
+    name: swap-web
+    image: swap-app
+    state: started
+    restart_policy: always
+    networks:
+      - name: "{{ db_network }}"
+    ports:
+      - "8000:8000"
+    env:
+      DB_HOST: "{{ db_host }}"
+      DB_DATABASE: "{{ db_name }}"
+      DB_USERNAME: "{{ db_username }}"
+      DB_PASSWORD: "{{ db_password }}"
