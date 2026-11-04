@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swap-deployment
+  labels:
+    app: swap
+    tier: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: swap
+  template:
+    metadata:
+      labels:
+        app: swap
+    spec:
+      containers:
+      - name: swap
+        image: ascnuminho/swap:u24
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DB_HOST
+          value: "swap-db"
+        - name: DB_DATABASE
+          value: "swap"
+        - name: DB_USERNAME
+          value: "swap_user"
+        - name: DB_PASSWORD
+          value: "swap_secret"
